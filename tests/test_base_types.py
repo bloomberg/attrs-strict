@@ -7,12 +7,7 @@ from attr_strict import type_validator
 
 @pytest.mark.parametrize(
     "value, expected, actual",
-    [
-        (3, str, int),
-        ("five", int, str),
-        (None, str, type(None)),
-        (2.3, int, float),
-    ],
+    [(3, str, int), ("five", int, str), (None, str, type(None)), (2.3, int, float)],
 )
 def test_primitive_types(value, expected, actual):
     @attr.s
@@ -22,9 +17,7 @@ def test_primitive_types(value, expected, actual):
     with pytest.raises(ValueError) as error:
         Something(number=value)
 
-    assert repr(
-        error.value
-    ) == "number must be {} (got {} that is a {})".format(
+    assert repr(error.value) == "number must be {} (got {} that is a {})".format(
         expected, value, actual
     )
 

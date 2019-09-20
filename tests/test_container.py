@@ -16,29 +16,21 @@ import attr
         (
             [1, 2, 3],
             typing.Set,
-            "Smth must be {} (got [1, 2, 3] that is a {})".format(
-                typing.Set, list
-            ),
+            "Smth must be {} (got [1, 2, 3] that is a {})".format(typing.Set, list),
         ),
         (
             [1, 2, 3],
             typing.Dict,
-            "Smth must be {} (got [1, 2, 3] that is a {})".format(
-                typing.Dict, list
-            ),
+            "Smth must be {} (got [1, 2, 3] that is a {})".format(typing.Dict, list),
         ),
         (
             [1, 2, 3],
             typing.Tuple,
-            "Smth must be {} (got [1, 2, 3] that is a {})".format(
-                typing.Tuple, list
-            ),
+            "Smth must be {} (got [1, 2, 3] that is a {})".format(typing.Tuple, list),
         ),
     ],
 )
-def test_container_is_not_of_expected_type_raises_TypeError(
-    items, types, message
-):
+def test_container_is_not_of_expected_type_raises_TypeError(items, types, message):
     validator = type_validator()
 
     attr = MagicMock()

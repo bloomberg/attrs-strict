@@ -26,8 +26,7 @@ def type_validator(empty_ok=True):
 def _validate_elements(attribute, value, expected_type):
     base_type = (
         getattr(expected_type, "__origin__")
-        if hasattr(expected_type, "__origin__")
-        and expected_type.__origin__ is not None
+        if hasattr(expected_type, "__origin__") and expected_type.__origin__ is not None
         else expected_type
     )
     if base_type is None:
@@ -90,9 +89,7 @@ def _handle_tuple(attribute, container, expected_type):
 
 
 def _handle_union(attribute, value, expected_type):
-    union_has_none_type = any(
-        elem is None.__class__ for elem in expected_type.__args__
-    )
+    union_has_none_type = any(elem is None.__class__ for elem in expected_type.__args__)
 
     if value is None and union_has_none_type:
         return
