@@ -12,5 +12,5 @@ script:
 matrix:
   include:
     - python: "3.7"
-      script: black --check attr_strict tests setup.py
+      script: black --check attrs_strict tests setup.py
       install: pip install black
