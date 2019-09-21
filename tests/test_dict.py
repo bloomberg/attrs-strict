@@ -7,7 +7,7 @@ try:
 except ImportError:
     from mock import Mock as MagicMock
 
-from attr_strict import type_validator
+from attrs_strict import type_validator
 
 
 def test_defaultdict_raise_error():

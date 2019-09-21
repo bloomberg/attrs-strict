@@ -1,11 +1,11 @@
-attr_strict documentation
+attrs_strict documentation
 ============================
 
 Background
 ----------
 
 The purpose of the library is to provide runtime validation for attributes specified in 
-`attr <https://www.attrs.org/en/stable/>`_ data classes. The types supported are all the builtin
+`attrs <https://www.attrs.org/en/stable/>`_ data classes. The types supported are all the builtin
 types and most of the ones defined in the typing library. For Python 2, the typing module is
 available through the backport found `here <https://pypi.org/project/typing/>`_. 
 
@@ -18,7 +18,7 @@ The library currently supports :code:`Python2.7`, :code:`Python3.6` and :code:`P
 
 Usage and examples
 ------------------
-Type enforcement is based on the :code:`type` attribute set on any field specified in an :code:`attr` dataclass.
+Type enforcement is based on the :code:`type` attribute set on any field specified in an :code:`attrs` dataclass.
 If the type argument is not specified no validation takes place. 
 
 .. code-block:: python
@@ -27,7 +27,7 @@ If the type argument is not specified no validation takes place.
 
   import attr
 
-  from attr_strict import type_validator, ContainerError
+  from attrs_strict import type_validator, ContainerError
 
   >>> @attr.s
   ... class SomeClass(object):
@@ -63,7 +63,7 @@ of the exception will contain the path to the specific element that caused the e
 
   import attr
 
-  from attr_strict import type_validator, ContainerError
+  from attrs_strict import type_validator, ContainerError
 
   >>> @attr.s
   ... class SomeClass(object):

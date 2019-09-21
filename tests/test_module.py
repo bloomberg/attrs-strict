@@ -1,14 +1,14 @@
-import attr_strict
+import attrs_strict
 
 
 def test_version():
-    assert hasattr(attr_strict, "__version__")
-    assert hasattr(attr_strict, "type_validator")
-    assert hasattr(attr_strict, "AttributeTypeError")
-    assert hasattr(attr_strict, "BadTypeError")
-    assert hasattr(attr_strict, "UnionError")
-    assert hasattr(attr_strict, "TupleError")
-    assert hasattr(attr_strict, "TypeValidationError")
+    assert hasattr(attrs_strict, "__version__")
+    assert hasattr(attrs_strict, "type_validator")
+    assert hasattr(attrs_strict, "AttributeTypeError")
+    assert hasattr(attrs_strict, "BadTypeError")
+    assert hasattr(attrs_strict, "UnionError")
+    assert hasattr(attrs_strict, "TupleError")
+    assert hasattr(attrs_strict, "TypeValidationError")
 
 
 # -----------------------------------------------------------------------------

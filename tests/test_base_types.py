@@ -2,7 +2,7 @@ import pytest
 
 import attr
 
-from attr_strict import type_validator
+from attrs_strict import type_validator
 
 
 @pytest.mark.parametrize(
