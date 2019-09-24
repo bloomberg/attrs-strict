@@ -1,5 +1,5 @@
 API Documentation
 -----------------
 
-.. automodule:: attr_strict
+.. automodule:: attrs_strict
    :members:

@@ -1,6 +1,6 @@
-# attr runtime validation
+# attrs runtime validation
 
-`attrs-strict` is a Python package that contains runtime validation for [`attr`]((https://github.com/python-attrs/attrs)) data classes based on the types existing in the typing module.
+`attrs-strict` is a Python package that contains runtime validation for [`attrs`]((https://github.com/python-attrs/attrs)) data classes based on the types existing in the typing module.
 
 ## Menu
 
@@ -16,12 +16,12 @@
 ## Rationale
 
 The purpose of the library is to provide runtime validation for attributes specified in 
-[`attr`](https://www.attrs.org/en/stable/) data classes. The types supported are all the builtin
+[`attrs`](https://www.attrs.org/en/stable/) data classes. The types supported are all the builtin
 types and most of the ones defined in the typing library. For Python 2, the typing module is
 available through the backport found [`here`](https://pypi.org/project/typing/>). 
 
 ## Quick Start
-Type enforcement is based on the `type` attribute set on any field specified in an `attr` dataclass. If the type argument is not specified no validation takes place.
+Type enforcement is based on the `type` attribute set on any field specified in an `attrs` dataclass. If the type argument is not specified no validation takes place.
 
 `pip install attrs-strict`
 
@@ -30,7 +30,7 @@ from typing import List
 
 import attr
 
-from attr_strict import type_validator
+from attrs_strict import type_validator
 
 >>> @attr.s
 ... class SomeClass(object):
@@ -60,7 +60,7 @@ from typing import List, Tuple
 
 import attr
 
-from attr_strict import type_validator
+from attrs_strict import type_validator
 
 >>> @attr.s
 ... class SomeClass(object):

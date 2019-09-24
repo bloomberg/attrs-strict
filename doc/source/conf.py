@@ -15,7 +15,7 @@ import sys
 
 sys.path.insert(0, os.path.abspath("../.."))
 
-from attr_strict import __version__
+from attrs_strict import __version__
 
 # -- Project information -----------------------------------------------------
 

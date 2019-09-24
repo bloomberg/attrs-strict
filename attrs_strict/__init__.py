@@ -1,4 +1,4 @@
-"""Runtime validation library for attr data classes.
+"""Runtime validation library for attrs data classes.
 
 """
 

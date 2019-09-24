@@ -6,7 +6,7 @@ try:
 except ImportError:
     from mock import Mock as MagicMock
 
-from attr_strict import type_validator
+from attrs_strict import type_validator
 
 
 def test_tuple_with_incorrect_number_of_arguments_raises():
