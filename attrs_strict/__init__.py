@@ -2,15 +2,15 @@
 
 """
 
-from ._version import __version__  # noqa
-from ._type_validation import type_validator
 from ._error import (
     AttributeTypeError,
     BadTypeError,
-    UnionError,
     TupleError,
     TypeValidationError,
+    UnionError,
 )
+from ._type_validation import type_validator
+from ._version import __version__  # noqa
 
 __all__ = [
     "type_validator",
