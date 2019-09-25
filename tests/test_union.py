@@ -39,7 +39,8 @@ def test_union_when_type_is_not_specified_raises(element, type_, error_message):
     with pytest.raises(ValueError) as error:
         validator(None, attr, element)
 
-    assert error_message == repr(error.value)
+    repr_msg = "<{}>".format(error_message)
+    assert repr_msg == repr(error.value)
 
 
 @pytest.mark.parametrize(

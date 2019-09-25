@@ -69,7 +69,8 @@ def test_list_of_values_raise_value_error(values, type_, error_message):
         validator(None, attrib, values)
 
     # THEN
-    assert error_message == repr(error.value)
+    msg = "<{}>".format(error_message)
+    assert msg == repr(error.value)
 
 
 @pytest.mark.parametrize(

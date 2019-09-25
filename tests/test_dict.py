@@ -25,9 +25,9 @@ def test_defaultdict_raise_error():
         validator(None, attr, elem)
 
     assert (
-        "foo must be typing.DefaultDict[int, typing.List[str]] "
+        "<foo must be typing.DefaultDict[int, typing.List[str]] "
         "(got 1 that is a {}) in [1, 2, 3] in "
-        "defaultdict({}, {{5: [1, 2, 3]}})"
+        "defaultdict({}, {{5: [1, 2, 3]}})>"
     ).format(int, int) == repr(error.value)
 
 

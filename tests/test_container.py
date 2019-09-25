@@ -49,7 +49,8 @@ def test_container_is_not_of_expected_type_raises_TypeError(
     with pytest.raises(ValueError) as error:
         validator(None, attr, items)
 
-    assert message == repr(error.value)
+    repr_msg = "<{}>".format(message)
+    assert repr_msg == repr(error.value)
 
 
 def test_does_not_raise_when_container_is_empty_and_allowed():
