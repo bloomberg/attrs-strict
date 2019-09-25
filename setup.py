@@ -12,6 +12,8 @@ setup(
     name="attrs-strict",
     version=__version__,
     description="Runtime validators for attrs",
+    long_description="file: README.md",
+    long_description_content_type="text/markdown",
     author="Erik-Cristian Seulean",
     author_email="eseulean@bloomberg.net",
     license="Apache 2.0",
