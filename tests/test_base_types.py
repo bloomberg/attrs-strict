@@ -23,7 +23,7 @@ def test_primitive_types(value, expected, actual):
 
     assert repr(
         error.value
-    ) == "number must be {} (got {} that is a {})".format(
+    ) == "<number must be {} (got {} that is a {})>".format(
         expected, value, actual
     )
 
@@ -38,6 +38,6 @@ def test_reassign_evaluate():
         x.number = 5
         attr.validate(x)
 
-    assert repr(error.value) == "number must be {} (got 5 that is a {})".format(
-        str, int
-    )
+    assert repr(
+        error.value
+    ) == "<number must be {} (got 5 that is a {})>".format(str, int)

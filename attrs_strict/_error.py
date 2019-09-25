@@ -1,5 +1,6 @@
 class TypeValidationError(Exception):
-    pass
+    def __repr__(self):
+        return "<{}>".format(str(self))
 
 
 class BadTypeError(TypeValidationError, ValueError):
@@ -9,8 +10,7 @@ class BadTypeError(TypeValidationError, ValueError):
     def add_container(self, container):
         self.containers.append(container)
 
-    def __repr__(self, error):
-        backtrack = ""
+    def _render(self, error):
         if self.containers:
             backtrack = " in ".join(
                 [str(container) for container in self.containers]
@@ -26,7 +26,7 @@ class AttributeTypeError(BadTypeError):
         self.container = container
         self.attribute = attribute
 
-    def __repr__(self):
+    def __str__(self):
         error = "{} must be {} (got {} that is a {})".format(
             self.attribute.name,
             self.attribute.type,
@@ -34,7 +34,7 @@ class AttributeTypeError(BadTypeError):
             type(self.container),
         )
 
-        return super(AttributeTypeError, self).__repr__(error)
+        return self._render(error)
 
 
 class TupleError(BadTypeError):
@@ -44,7 +44,7 @@ class TupleError(BadTypeError):
         self.container = container
         self.tuple_types = tuple_types
 
-    def __repr__(self):
+    def __str__(self):
         error = (
             "Element {} has {} elements than types "
             "specified in {}. Expected {} received {}"
@@ -56,7 +56,7 @@ class TupleError(BadTypeError):
             len(self.container),
         )
 
-        return super(TupleError, self).__repr__(error)
+        return self._render(error)
 
     def _more_or_less(self):
         return "more" if len(self.container) > len(self.tuple_types) else "less"
@@ -69,9 +69,9 @@ class UnionError(BadTypeError):
         self.container = container
         self.expected_type = expected_type
 
-    def __repr__(self):
+    def __str__(self):
         error = "Value of {} {} is not of type {}".format(
             self.attribute, self.container, self.expected_type
         )
 
-        return super(UnionError, self).__repr__(error)
+        return self._render(error)

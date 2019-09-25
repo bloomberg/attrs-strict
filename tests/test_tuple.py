@@ -23,8 +23,8 @@ def test_tuple_with_incorrect_number_of_arguments_raises():
         validator(None, attr, element)
 
     assert (
-        "Element (1, 2, 3, 4) has more elements than types specified "
-        "in typing.Tuple[int, int, int]. Expected 3 received 4"
+        "<Element (1, 2, 3, 4) has more elements than types specified "
+        "in typing.Tuple[int, int, int]. Expected 3 received 4>"
     ) == repr(error.value)
 
 
@@ -41,7 +41,7 @@ def test_tuple_of_tuple_raises():
         validator(None, attr, element)
 
     assert (
-        "Element (3, 4, 5) has more elements than types specified "
+        "<Element (3, 4, 5) has more elements than types specified "
         "in typing.Tuple[typing.Tuple[int, int], typing.Tuple[int, int]]. "
-        "Expected 2 received 3 in ((1, 2), (3, 4, 5))"
+        "Expected 2 received 3 in ((1, 2), (3, 4, 5))>"
     ) == repr(error.value)
