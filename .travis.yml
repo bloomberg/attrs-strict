@@ -13,7 +13,7 @@ script:
 
 deploy:
   - provider: script
-    script: python -m pip install tox && tox -vve publish
+    script: python -m pip install tox && tox -vve pypi_publish
     on:
       tags: true
       python: "3.7"
