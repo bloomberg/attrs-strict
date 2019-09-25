@@ -1,12 +1,13 @@
-import pytest
 from typing import Tuple
+
+import pytest
+
+from attrs_strict import type_validator
 
 try:
     from unittest.mock import MagicMock
 except ImportError:
     from mock import Mock as MagicMock
-
-from attrs_strict import type_validator
 
 
 def test_tuple_with_incorrect_number_of_arguments_raises():

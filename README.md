@@ -15,10 +15,10 @@
 
 ## Rationale
 
-The purpose of the library is to provide runtime validation for attributes specified in 
+The purpose of the library is to provide runtime validation for attributes specified in
 [`attrs`](https://www.attrs.org/en/stable/) data classes. The types supported are all the builtin
 types and most of the ones defined in the typing library. For Python 2, the typing module is
-available through the backport found [`here`](https://pypi.org/project/typing/>). 
+available through the backport found [`here`](https://pypi.org/project/typing/>).
 
 ## Quick Start
 Type enforcement is based on the `type` attribute set on any field specified in an `attrs` dataclass. If the type argument is not specified no validation takes place.
@@ -79,13 +79,13 @@ names must be typing.List[typing.Tuple[str, str]] (
 
 ### What is currently supported ?
 
-Currently there's support for simple types and types specified in the `typing` module: `List`, `Dict`, `DefaultDict`, `Set`, `Union`, `Tuple` and any combination of them. This means that you can specify nested types like `List[List[Dict[int, str]]]` and the validation would check if attribute has the specific type. 
+Currently there's support for simple types and types specified in the `typing` module: `List`, `Dict`, `DefaultDict`, `Set`, `Union`, `Tuple` and any combination of them. This means that you can specify nested types like `List[List[Dict[int, str]]]` and the validation would check if attribute has the specific type.
 
 `Callables`, `TypeVars` or `Generics` are not supported yet but there are plans to support this in the future.
 
 ## Building
 
-For development, the project uses `tox` in order to install dependencies, run tests and generate documentation. In order to be able to do this, you need tox `pip install tox` and after that invoke `tox` in the root of the project. 
+For development, the project uses `tox` in order to install dependencies, run tests and generate documentation. In order to be able to do this, you need tox `pip install tox` and after that invoke `tox` in the root of the project.
 
 ## Installation
 

@@ -1,12 +1,13 @@
+from typing import Dict, List, Set, Tuple
+
 import pytest
-from typing import List, Dict, Set, Tuple
+
+from attrs_strict import type_validator
 
 try:
     from unittest.mock import MagicMock
 except ImportError:
     from mock import Mock as MagicMock
-
-from attrs_strict import type_validator
 
 
 @pytest.mark.parametrize(

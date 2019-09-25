@@ -4,25 +4,25 @@ attrs_strict documentation
 Background
 ----------
 
-The purpose of the library is to provide runtime validation for attributes specified in 
+The purpose of the library is to provide runtime validation for attributes specified in
 `attrs <https://www.attrs.org/en/stable/>`_ data classes. The types supported are all the builtin
 types and most of the ones defined in the typing library. For Python 2, the typing module is
-available through the backport found `here <https://pypi.org/project/typing/>`_. 
+available through the backport found `here <https://pypi.org/project/typing/>`_.
 
 Getting started
 ---------------
 
 Run :code:`pip install attrs-strict` to install the latest stable version from PyPi.
 The source code is hosted on github at `<https://github.com/bloomberg/attrs_strict>`_.
-The library currently supports :code:`Python2.7`, :code:`Python3.6` and :code:`Python3.7`. 
+The library currently supports :code:`Python2.7`, :code:`Python3.6` and :code:`Python3.7`.
 
 Usage and examples
 ------------------
 Type enforcement is based on the :code:`type` attribute set on any field specified in an :code:`attrs` dataclass.
-If the type argument is not specified no validation takes place. 
+If the type argument is not specified no validation takes place.
 
 .. code-block:: python
-  
+
   from typing import List
 
   import attr
@@ -93,7 +93,7 @@ attribute has the specific type.
 :code:`Callables`, :code:`TypeVars` or :code:`Generics` are not supported yet but
 there are plans to support this in the future.
 
-.. toctree::   
+.. toctree::
    :maxdepth: 1
-   
+
    api

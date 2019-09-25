@@ -12,7 +12,9 @@ class BadTypeError(TypeValidationError, ValueError):
     def __repr__(self, error):
         backtrack = ""
         if self.containers:
-            backtrack = " in ".join([str(container) for container in self.containers])
+            backtrack = " in ".join(
+                [str(container) for container in self.containers]
+            )
             return "{} in {}".format(error, backtrack)
 
         return error

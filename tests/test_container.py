@@ -1,13 +1,14 @@
-import pytest
 import typing
+
+import attr
+import pytest
+
+from attrs_strict import type_validator
 
 try:
     from unittest.mock import MagicMock
 except ImportError:
     from mock import Mock as MagicMock
-
-from attrs_strict import type_validator
-import attr
 
 
 @pytest.mark.parametrize(
@@ -16,21 +17,29 @@ import attr
         (
             [1, 2, 3],
             typing.Set,
-            "Smth must be {} (got [1, 2, 3] that is a {})".format(typing.Set, list),
+            "Smth must be {} (got [1, 2, 3] that is a {})".format(
+                typing.Set, list
+            ),
         ),
         (
             [1, 2, 3],
             typing.Dict,
-            "Smth must be {} (got [1, 2, 3] that is a {})".format(typing.Dict, list),
+            "Smth must be {} (got [1, 2, 3] that is a {})".format(
+                typing.Dict, list
+            ),
         ),
         (
             [1, 2, 3],
             typing.Tuple,
-            "Smth must be {} (got [1, 2, 3] that is a {})".format(typing.Tuple, list),
+            "Smth must be {} (got [1, 2, 3] that is a {})".format(
+                typing.Tuple, list
+            ),
         ),
     ],
 )
-def test_container_is_not_of_expected_type_raises_TypeError(items, types, message):
+def test_container_is_not_of_expected_type_raises_TypeError(
+    items, types, message
+):
     validator = type_validator()
 
     attr = MagicMock()
