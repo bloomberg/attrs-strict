@@ -41,15 +41,10 @@ If the type argument is not specified no validation takes place.
   >>> sc
   SomeClass(list_of_numbers=[1, 2, 3, 4])
 
-  >>> try:
-  ...    other = SomeClass([1,2,3,'four'])
-  ... except ValueError as error:
-  ...    print(repr(error))
-  ...
-  ContainerError: (
-    "list_of_numbers must be typing.List[int] "
-    "(got four that is a <class 'str'>) "
-    "in [1, 2, 3, 'four']"
+  >>> SomeClass([1,2,3,'four'])
+  attrs_strict._error.AttributeTypeError(
+    "list_of_numbers must be typing.List[int]"
+    "(got four that is a <class 'str'>) in [1, 2, 3, 'four']"
   )
 
 Nested type exceptions are validated acordingly, and a backtrace to the initial
@@ -68,17 +63,14 @@ of the exception will contain the path to the specific element that caused the e
   >>> @attr.s
   ... class SomeClass(object):
   ...     names = attr.ib(
-  ...        validator=type_validator(), type=List[Tuple(str, str)]
+  ...        validator=type_validator(), type=List[Tuple[str, str]]
   ...     )
 
-  >>> try:
-  ...    sc = SomeClass(names=[('Moo', 'Moo'), ('Zoo',123)])
-  ... except ValueError as error:
-  ...    print(repr(error))
-  ContainerError: (
-    "names must be typing.List[typing.Tuple[str, str]] "
-    "(got 123 that is a <class 'int'>) in ('Zoo', 123) "
-    "in [('Moo', 'Moo'), ('Zoo', 123)]"
+  >>> sc = SomeClass(names=[('Moo', 'Moo'), ('Zoo',123)])
+  attrs_strict._error.AttributeTypeError(
+    "names must be"
+    "typing.List[typing.Tuple[str, str]] (got 123 that is a <class 'int'>) in"
+    "('Zoo', 123) in [('Moo', 'Moo'), ('Zoo', 123)]"
   )
 
 What is currently supported ?
