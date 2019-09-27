@@ -5,11 +5,18 @@ from setuptools import setup
 with open("README.md") as fp:
     readme = fp.read()
 
+long_description = "".join(
+    [
+        section.split("<!-- end -->")[0]
+        for section in readme.split("<!-- begin -->")
+        if "<!-- end -->" in section
+    ]
+)
 
 setup(
     name="attrs-strict",
     description="Runtime validators for attrs",
-    long_description=readme,
+    long_description=long_description,
     long_description_content_type="text/markdown",
     author="Erik-Cristian Seulean",
     author_email="eseulean@bloomberg.net",

@@ -1,3 +1,4 @@
+<!-- begin -->
 [![Latest version on
 PyPi](https://badge.fury.io/py/attrs-strict.svg)](https://badge.fury.io/py/attrs-strict)
 [![Supported Python
@@ -10,6 +11,7 @@ black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://gith
 
 `attrs-strict` is a Python package that contains runtime validation for [`attrs`]((https://github.com/python-attrs/attrs)) data classes based on the types existing in the typing module.
 
+<!-- end -->
 ## Menu
 
 - [Rationale](#rationale)
@@ -21,12 +23,12 @@ black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://gith
 - [Code of Conduct](#code-of-conduct)
 - [Security Vulnerability Reporting](#security-vulnerability-reporting)
 
+<!-- begin -->
 ## Rationale
-
 The purpose of the library is to provide runtime validation for attributes specified in
 [`attrs`](https://www.attrs.org/en/stable/) data classes. The types supported are all the builtin
 types and most of the ones defined in the typing library. For Python 2, the typing module is
-available through the backport found [`here`](https://pypi.org/project/typing/>).
+available through the backport found [`here`](https://pypi.org/project/typing/).
 
 ## Quick Start
 Type enforcement is based on the `type` attribute set on any field specified in an `attrs` dataclass. If the type argument is not specified no validation takes place.
@@ -95,10 +97,11 @@ For development, the project uses `tox` in order to install dependencies, run te
 
 ## Installation
 
-Run `pip install attrs-strict` to install the latest stable version from [PyPi](https://pypi.org/project/attrs-strict/). Documentation is hosted on [readthedocs](https://pypi.org/project/attrs/).
+Run `pip install attrs-strict` to install the latest stable version from [PyPi](https://pypi.org/project/attrs-strict/). Documentation is hosted on [readthedocs](https://attrs-strict.readthedocs.io/en/latest/).
 
 For the latest version, on github `pip install git+https://github.com/bloomberg/attrs-strict`.
 
+<!-- end -->
 ## Contributions
 
 We :heart: contributions.
