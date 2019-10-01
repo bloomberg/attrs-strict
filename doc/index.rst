@@ -13,7 +13,7 @@ Getting started
 ---------------
 
 Run :code:`pip install attrs-strict` to install the latest stable version from PyPi.
-The source code is hosted on github at `<https://github.com/bloomberg/attrs_strict>`_.
+The source code is hosted on github at `<https://github.com/bloomberg/attrs-strict>`_.
 The library currently supports :code:`Python2.7`, :code:`Python3.6` and :code:`Python3.7`.
 
 Usage and examples
