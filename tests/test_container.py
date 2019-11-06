@@ -67,13 +67,17 @@ def test_raises_when_container_is_empty_and_empty_ok_is_false():
     # GIVEN
     items = []
     validator = type_validator(empty_ok=False)
+    attr = MagicMock()
+    attr.name = "Smth"
+    attr.type = str
 
     # WHEN
     with pytest.raises(ValueError) as error:
-        validator(None, None, items)
+        validator(None, attr, items)
 
     # THEN
-    assert "Expected a non-empty attribute" == str(error.value)
+    assert "Smth can not be empty and must be str"
+    "(got None)" == str(error.value)
 
 
 def test_no_type_specified_is_fine():
