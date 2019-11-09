@@ -37,6 +37,22 @@ class AttributeTypeError(BadTypeError):
         return self._render(error)
 
 
+class EmptyError(BadTypeError):
+    def __init__(self, container, attribute):
+        super(EmptyError, self).__init__()
+        self.container = container
+        self.attribute = attribute
+
+    def __str__(self):
+        error = "{} can not be empty and must be {} (got {})".format(
+            self.attribute.name,
+            self.attribute.type,
+            self.container,
+        )
+
+        return self._render(error)
+
+
 class TupleError(BadTypeError):
     def __init__(self, container, attribute, tuple_types):
         super(TupleError, self).__init__()

@@ -1,7 +1,7 @@
 import collections
 import typing
 
-from ._error import AttributeTypeError, BadTypeError, TupleError, UnionError
+from ._error import AttributeTypeError, BadTypeError, EmptyError, TupleError, UnionError
 
 
 def type_validator(empty_ok=True):
@@ -16,7 +16,7 @@ def type_validator(empty_ok=True):
 
     def _validator(instance, attribute, field):
         if not empty_ok and not field:
-            raise ValueError("Expected a non-empty attribute")
+            raise EmptyError(field, attribute)
 
         _validate_elements(attribute, field, attribute.type)
 
