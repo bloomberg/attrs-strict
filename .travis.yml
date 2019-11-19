@@ -4,6 +4,7 @@ python:
   - "2.7"
   - "3.6"
   - "3.7"
+  - "3.8"
   - "pypy"
   - "pypy3"
 install:
@@ -16,5 +17,5 @@ deploy:
     script: python -m pip install tox && tox -vve pypi_publish
     on:
       tags: true
-      python: "3.7"
+      python: "3.8"
       condition: -n "$TWINE_PASSWORD"
