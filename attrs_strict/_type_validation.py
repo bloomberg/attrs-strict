@@ -1,10 +1,23 @@
+from __future__ import annotations
+
 import collections
 import typing
 
-from ._error import AttributeTypeError, BadTypeError, EmptyError, TupleError, UnionError
+from ._error import (
+    AttributeTypeError,
+    BadTypeError,
+    EmptyError,
+    TupleError,
+    UnionError,
+)
+
+if typing.TYPE_CHECKING:
+    import attr
 
 
-def type_validator(empty_ok=True):
+def type_validator(
+    empty_ok: bool = True,
+) -> typing.Callable[[typing.Any, attr.Attribute, typing.Any], None]:
     """
     Validates the attributes using the type argument specified. If the
     type argument is not present, the attribute is considered valid.
@@ -14,7 +27,9 @@ def type_validator(empty_ok=True):
 
     """
 
-    def _validator(instance, attribute, field):
+    def _validator(
+        instance: typing.Any, attribute: attr.Attribute, field: typing.Any
+    ) -> None:
         if not empty_ok and not field:
             raise EmptyError(field, attribute)
 
@@ -23,11 +38,15 @@ def type_validator(empty_ok=True):
     return _validator
 
 
-def _validate_elements(attribute, value, expected_type):
+def _validate_elements(
+    attribute: attr.Attribute,
+    value: typing.Any,
+    expected_type: typing.Optional[typing.Type],
+) -> None:
     base_type = (
-        expected_type.__origin__
+        expected_type.__origin__  # type: ignore
         if hasattr(expected_type, "__origin__")
-        and expected_type.__origin__ is not None
+        and expected_type.__origin__ is not None  # type: ignore
         else expected_type
     )
 
@@ -53,8 +72,12 @@ def _validate_elements(attribute, value, expected_type):
         _handle_union(attribute, value, expected_type)
 
 
-def _handle_set_or_list(attribute, container, expected_type):
-    element_type, = expected_type.__args__
+def _handle_set_or_list(
+    attribute: attr.Attribute,
+    container: typing.Union[typing.Set, typing.List],
+    expected_type: typing.Optional[typing.Type],
+) -> None:
+    (element_type,) = expected_type.__args__  # type: ignore
 
     for element in container:
         try:
@@ -64,8 +87,12 @@ def _handle_set_or_list(attribute, container, expected_type):
             raise error
 
 
-def _handle_dict(attribute, container, expected_type):
-    key_type, value_type = expected_type.__args__
+def _handle_dict(
+    attribute: attr.Attribute,
+    container: typing.Dict,
+    expected_type: typing.Optional[typing.Type],
+) -> None:
+    key_type, value_type = expected_type.__args__  # type: ignore
 
     for key in container:
         try:
@@ -76,8 +103,12 @@ def _handle_dict(attribute, container, expected_type):
             raise error
 
 
-def _handle_tuple(attribute, container, expected_type):
-    tuple_types = expected_type.__args__
+def _handle_tuple(
+    attribute: attr.Attribute,
+    container: typing.Tuple,
+    expected_type: typing.Optional[typing.Type],
+) -> None:
+    tuple_types = expected_type.__args__  # type: ignore
 
     if len(container) != len(tuple_types):
         raise TupleError(container, attribute.type, tuple_types)
@@ -90,15 +121,19 @@ def _handle_tuple(attribute, container, expected_type):
             raise error
 
 
-def _handle_union(attribute, value, expected_type):
+def _handle_union(
+    attribute: attr.Attribute,
+    value: typing.Any,
+    expected_type: typing.Optional[typing.Type],
+) -> None:
     union_has_none_type = any(
-        elem is None.__class__ for elem in expected_type.__args__
+        elem is None.__class__ for elem in expected_type.__args__  # type: ignore
     )
 
     if value is None and union_has_none_type:
         return
 
-    for arg in expected_type.__args__:
+    for arg in expected_type.__args__:  # type: ignore
         try:
             _validate_elements(attribute, value, arg)
             return
