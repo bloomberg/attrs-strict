@@ -1,7 +1,5 @@
 import typing
-
-if typing.TYPE_CHECKING:
-    import attr
+import attr
 
 
 class TypeValidationError(Exception):

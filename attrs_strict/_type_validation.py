@@ -1,7 +1,7 @@
-from __future__ import annotations
-
 import collections
 import typing
+
+import attr
 
 from ._error import (
     AttributeTypeError,
@@ -11,13 +11,10 @@ from ._error import (
     UnionError,
 )
 
-if typing.TYPE_CHECKING:
-    import attr
-
 
 def type_validator(
     empty_ok: bool = True,
-) -> typing.Callable[[typing.Any, attr.Attribute, typing.Any], None]:
+) -> typing.Callable[[typing.Any, "attr.Attribute", typing.Any], None]:
     """
     Validates the attributes using the type argument specified. If the
     type argument is not present, the attribute is considered valid.
