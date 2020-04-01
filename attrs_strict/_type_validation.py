@@ -1,7 +1,13 @@
 import collections
 import typing
 
-from ._error import AttributeTypeError, BadTypeError, EmptyError, TupleError, UnionError
+from ._error import (
+    AttributeTypeError,
+    BadTypeError,
+    EmptyError,
+    TupleError,
+    UnionError,
+)
 
 
 def type_validator(empty_ok=True):
@@ -54,7 +60,7 @@ def _validate_elements(attribute, value, expected_type):
 
 
 def _handle_set_or_list(attribute, container, expected_type):
-    element_type, = expected_type.__args__
+    (element_type,) = expected_type.__args__
 
     for element in container:
         try:
