@@ -45,9 +45,7 @@ class EmptyError(BadTypeError):
 
     def __str__(self):
         error = "{} can not be empty and must be {} (got {})".format(
-            self.attribute.name,
-            self.attribute.type,
-            self.container,
+            self.attribute.name, self.attribute.type, self.container,
         )
 
         return self._render(error)
