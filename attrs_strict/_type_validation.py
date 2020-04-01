@@ -37,7 +37,7 @@ def _validate_elements(attribute, value, expected_type):
         else expected_type
     )
 
-    if base_type is None:
+    if base_type is None or base_type == typing.Any:
         return
 
     if base_type != typing.Union and not isinstance(value, base_type):
