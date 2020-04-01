@@ -1,7 +1,13 @@
 import collections
 import typing
 
-from ._error import AttributeTypeError, BadTypeError, EmptyError, TupleError, UnionError
+from ._error import (
+    AttributeTypeError,
+    BadTypeError,
+    EmptyError,
+    TupleError,
+    UnionError,
+)
 
 
 def type_validator(empty_ok=True):
@@ -31,7 +37,7 @@ def _validate_elements(attribute, value, expected_type):
         else expected_type
     )
 
-    if base_type is None:
+    if base_type is None or base_type == typing.Any:
         return
 
     if base_type != typing.Union and not isinstance(value, base_type):
@@ -54,7 +60,7 @@ def _validate_elements(attribute, value, expected_type):
 
 
 def _handle_set_or_list(attribute, container, expected_type):
-    element_type, = expected_type.__args__
+    (element_type,) = expected_type.__args__
 
     for element in container:
         try:

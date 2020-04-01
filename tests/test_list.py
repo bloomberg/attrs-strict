@@ -1,4 +1,4 @@
-from typing import Dict, List, Set, Tuple
+from typing import Any, Dict, List, Set, Tuple
 
 import pytest
 
@@ -80,6 +80,8 @@ def test_list_of_values_raise_value_error(values, type_, error_message):
         ([[1], [2], [3]], List[List[int]]),
         ({1, 2, 3}, Set[int]),
         ([{1: [1, 2, 3], 2: [3, 4, 5]}], List[Dict[int, List[int]]]),
+        ([1, 2, 3, 4], List[Any]),
+        ([1, 2, {"foo": "bar"}], List[Any]),
     ],
 )
 def test_list_of_valid_values_no_raise(values, type_):

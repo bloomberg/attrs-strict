@@ -1,5 +1,5 @@
 import collections
-from typing import DefaultDict, List
+from typing import Any, Dict, DefaultDict, List
 
 import pytest
 
@@ -41,5 +41,17 @@ def test_defaultdict_with_correct_type_no_raise():
     attr = MagicMock()
     attr.name = "foo"
     attr.type = DefaultDict[int, List[int]]
+
+    validator(None, attr, elem)
+
+
+def test_dict_with_any_does_not_raise():
+    elem = {"foo": 123, "b": "abc"}
+
+    validator = type_validator()
+
+    attr = MagicMock()
+    attr.name = "zoo"
+    attr.type = Dict[str, Any]
 
     validator(None, attr, elem)
