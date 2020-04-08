@@ -9,6 +9,13 @@ from ._error import (
     UnionError,
 )
 
+try:
+    from collections.abc import Mapping
+    from collections.abc import MutableMapping
+except ImportError:
+    from collections import Mapping
+    from collections import MutableMapping
+
 
 def type_validator(empty_ok=True):
     """
@@ -49,8 +56,12 @@ def _validate_elements(attribute, value, expected_type):
         dict,
         collections.OrderedDict,
         collections.defaultdict,
+        Mapping,
+        MutableMapping,
         typing.Dict,
         typing.DefaultDict,
+        typing.Mapping,
+        typing.MutableMapping,
     }:
         _handle_dict(attribute, value, expected_type)
     elif base_type in {tuple, typing.Tuple}:
