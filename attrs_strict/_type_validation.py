@@ -11,6 +11,12 @@ from ._error import (
     UnionError,
 )
 
+try:
+    from collections.abc import Mapping
+    from collections.abc import MutableMapping
+except ImportError:
+    from collections import Mapping
+    from collections import MutableMapping
 
 def type_validator(
     empty_ok: bool = True,
@@ -47,7 +53,7 @@ def _validate_elements(
         else expected_type
     )
 
-    if base_type is None:
+    if base_type is None or base_type == typing.Any:
         return
 
     if base_type != typing.Union and not isinstance(value, base_type):
@@ -59,8 +65,12 @@ def _validate_elements(
         dict,
         collections.OrderedDict,
         collections.defaultdict,
+        Mapping,
+        MutableMapping,
         typing.Dict,
         typing.DefaultDict,
+        typing.Mapping,
+        typing.MutableMapping,
     }:
         _handle_dict(attribute, value, expected_type)
     elif base_type in {tuple, typing.Tuple}:
