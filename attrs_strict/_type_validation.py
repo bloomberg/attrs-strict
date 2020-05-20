@@ -1,6 +1,7 @@
 import collections
 import typing
 
+from ._commons import is_newtype
 from ._error import (
     AttributeTypeError,
     BadTypeError,
@@ -53,12 +54,15 @@ def type_validator(empty_ok=True):
 
 
 def _validate_elements(attribute, value, expected_type):
-    base_type = (
-        expected_type.__origin__
-        if hasattr(expected_type, "__origin__")
+    if (
+        hasattr(expected_type, "__origin__")
         and expected_type.__origin__ is not None
-        else expected_type
-    )
+    ):
+        base_type = expected_type.__origin__
+    elif is_newtype(expected_type):
+        base_type = expected_type.__supertype__
+    else:
+        base_type = expected_type
 
     if base_type is None or base_type == typing.Any:
         return
