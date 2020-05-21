@@ -5,17 +5,26 @@ from ._commons import is_newtype
 from ._error import (
     AttributeTypeError,
     BadTypeError,
+    CallableError,
     EmptyError,
     TupleError,
     UnionError,
 )
 
 try:
-    from collections.abc import Mapping
-    from collections.abc import MutableMapping
+    from collections.abc import Mapping, MutableMapping, Callable
 except ImportError:
-    from collections import Mapping
-    from collections import MutableMapping
+    from collections import Mapping, MutableMapping, Callable
+
+try:
+    from inspect import signature
+except ImportError:
+    from funcsigs import signature
+
+try:
+    from itertools import zip_longest
+except ImportError:
+    from itertools import izip_longest as zip_longest
 
 
 class SimilarTypes:
@@ -32,6 +41,7 @@ class SimilarTypes:
     }
     List = {set, list, typing.List, typing.Set}
     Tuple = {tuple, typing.Tuple}
+    Callable = {typing.Callable, Callable}
 
 
 def type_validator(empty_ok=True):
@@ -54,15 +64,7 @@ def type_validator(empty_ok=True):
 
 
 def _validate_elements(attribute, value, expected_type):
-    if (
-        hasattr(expected_type, "__origin__")
-        and expected_type.__origin__ is not None
-    ):
-        base_type = expected_type.__origin__
-    elif is_newtype(expected_type):
-        base_type = expected_type.__supertype__
-    else:
-        base_type = expected_type
+    base_type = _get_base_type(expected_type)
 
     if base_type is None or base_type == typing.Any:
         return
@@ -78,6 +80,68 @@ def _validate_elements(attribute, value, expected_type):
         _handle_tuple(attribute, value, expected_type)
     elif base_type == typing.Union:
         _handle_union(attribute, value, expected_type)
+    elif base_type in SimilarTypes.Callable:
+        _handle_callable(attribute, value, expected_type)
+
+
+def _get_base_type(type_):
+    if hasattr(type_, "__origin__") and type_.__origin__ is not None:
+        base_type = type_.__origin__
+    elif is_newtype(type_):
+        base_type = type_.__supertype__
+    else:
+        base_type = type_
+
+    return base_type
+
+
+def _type_matching(actual, expected):
+    actual = actual.__supertype__ if is_newtype(actual) else actual
+    expected = expected.__supertype__ if is_newtype(expected) else expected
+
+    if expected == actual or expected == typing.Any:
+        return True
+
+    base_type = _get_base_type(expected)
+
+    if base_type == typing.Union:
+        return any(
+            _type_matching(actual, expected_candidate)
+            for expected_candidate in expected.__args__
+        )
+
+    elif base_type in (
+        SimilarTypes.Dict
+        | SimilarTypes.List
+        | SimilarTypes.Tuple
+        | SimilarTypes.Callable
+    ):
+        return all(
+            _type_matching(actual, expected)
+            for actual, expected in zip_longest(
+                actual.__args__, expected.__args__
+            )
+        )
+
+    return False
+
+
+def _handle_callable(attribute, callable_, expected_type):
+    _signature = signature(callable_)
+    callable_args = [
+        param.annotation for param in _signature.parameters.values()
+    ]
+    callable_args.append(_signature.return_annotation)
+    if not expected_type.__args__:
+        return  # No annotations specified on type, matches all Callables
+
+    for callable_arg, expected_arg in zip_longest(
+        callable_args, expected_type.__args__
+    ):
+        if not _type_matching(callable_arg, expected_arg):
+            raise CallableError(
+                attribute, _signature, expected_type, callable_arg, expected_arg
+            )
 
 
 def _handle_set_or_list(attribute, container, expected_type):
