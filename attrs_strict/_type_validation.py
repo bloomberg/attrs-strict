@@ -17,6 +17,22 @@ except ImportError:
     from collections import MutableMapping
 
 
+class SimilarTypes:
+    Dict = {
+        dict,
+        collections.OrderedDict,
+        collections.defaultdict,
+        Mapping,
+        MutableMapping,
+        typing.Dict,
+        typing.DefaultDict,
+        typing.Mapping,
+        typing.MutableMapping,
+    }
+    List = {set, list, typing.List, typing.Set}
+    Tuple = {tuple, typing.Tuple}
+
+
 def type_validator(empty_ok=True):
     """
     Validates the attributes using the type argument specified. If the
@@ -50,21 +66,11 @@ def _validate_elements(attribute, value, expected_type):
     if base_type != typing.Union and not isinstance(value, base_type):
         raise AttributeTypeError(value, attribute)
 
-    if base_type in {set, list, typing.List, typing.Set}:
+    if base_type in SimilarTypes.List:
         _handle_set_or_list(attribute, value, expected_type)
-    elif base_type in {
-        dict,
-        collections.OrderedDict,
-        collections.defaultdict,
-        Mapping,
-        MutableMapping,
-        typing.Dict,
-        typing.DefaultDict,
-        typing.Mapping,
-        typing.MutableMapping,
-    }:
+    elif base_type in SimilarTypes.Dict:
         _handle_dict(attribute, value, expected_type)
-    elif base_type in {tuple, typing.Tuple}:
+    elif base_type in SimilarTypes.Tuple:
         _handle_tuple(attribute, value, expected_type)
     elif base_type == typing.Union:
         _handle_union(attribute, value, expected_type)
