@@ -87,7 +87,7 @@ attrs_strict._error.AttributeTypeError: names must be
 
 ### What is currently supported ?
 
-Currently there's support for simple types and types specified in the `typing` module: `List`, `Dict`, `DefaultDict`, `Set`, `Union`, `Tuple` and any combination of them. This means that you can specify nested types like `List[List[Dict[int, str]]]` and the validation would check if attribute has the specific type.
+Currently there's support for simple types and types specified in the `typing` module: `List`, `Dict`, `DefaultDict`, `Set`, `Union`, `Tuple`, `NewType`, and any combination of them. This means that you can specify nested types like `List[List[Dict[int, str]]]` and the validation would check if attribute has the specific type.
 
 `Callables`, `TypeVars` or `Generics` are not supported yet but there are plans to support this in the future.
 

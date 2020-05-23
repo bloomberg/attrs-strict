@@ -1,3 +1,6 @@
+from ._commons import format_type
+
+
 class TypeValidationError(Exception):
     def __repr__(self):
         return "<{}>".format(str(self))
@@ -29,7 +32,7 @@ class AttributeTypeError(BadTypeError):
     def __str__(self):
         error = "{} must be {} (got {} that is a {})".format(
             self.attribute.name,
-            self.attribute.type,
+            format_type(self.attribute.type),
             self.container,
             type(self.container),
         )
@@ -45,7 +48,9 @@ class EmptyError(BadTypeError):
 
     def __str__(self):
         error = "{} can not be empty and must be {} (got {})".format(
-            self.attribute.name, self.attribute.type, self.container,
+            self.attribute.name,
+            format_type(self.attribute.type),
+            self.container,
         )
 
         return self._render(error)
