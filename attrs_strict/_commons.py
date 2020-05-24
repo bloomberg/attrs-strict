@@ -1,8 +1,8 @@
 def is_newtype(type_):
     return (
         hasattr(type_, "__name__")
+        and hasattr(type_, "__supertype__")
         and type_.__module__ == "typing"
-        and type_.__name__ == "SomeNew"
     )
 
 
