@@ -40,6 +40,36 @@ class AttributeTypeError(BadTypeError):
         return self._render(error)
 
 
+class CallableError(BadTypeError):
+    def __init__(
+        self,
+        attribute,
+        callable_signature,
+        expected_signature,
+        mismatch_callable_arg,
+        expected_callable_arg,
+    ):
+        super(CallableError, self).__init__()
+        self.attribute = attribute
+        self.callable_signature = callable_signature
+        self.expected_signature = expected_signature
+        self.mismatch_callable_arg = mismatch_callable_arg
+        self.expected_callable_arg = expected_callable_arg
+
+    def __str__(self):
+        error_msg = (
+            "Error with: {} . Expected Callable "
+            "signature: {} got: {}. {} should be {}"
+        ).format(
+            self.attribute.name,
+            self.expected_signature,
+            self.callable_signature,
+            self.mismatch_callable_arg,
+            self.expected_callable_arg,
+        )
+        return self._render(error_msg)
+
+
 class EmptyError(BadTypeError):
     def __init__(self, container, attribute):
         super(EmptyError, self).__init__()

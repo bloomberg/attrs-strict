@@ -87,9 +87,25 @@ attrs_strict._error.AttributeTypeError: names must be
 
 ### What is currently supported ?
 
-Currently there's support for simple types and types specified in the `typing` module: `List`, `Dict`, `DefaultDict`, `Set`, `Union`, `Tuple`, `NewType`, and any combination of them. This means that you can specify nested types like `List[List[Dict[int, str]]]` and the validation would check if attribute has the specific type.
+Currently there's support for simple types and types specified in the `typing` module: `List`, `Dict`, `DefaultDict`, `Set`, `Union`, `Tuple`, `NewType`, `Callable` and any combination of them. This means that you can specify nested types like `List[List[Dict[int, str]]]` and the validation would check if attribute has the specific type.
 
-`Callables`, `TypeVars` or `Generics` are not supported yet but there are plans to support this in the future.
+`Callable` will validate if the callable function's annotation matches the type definition. If type does not specify any annotations then all callables will pass the validation against it. Support for `Callable` is not available for `python2`.
+```python
+@attr.s
+>>>def fully_annotated_function(self, a: int, b: int)->str:
+        ...
+>>> def un_annonated_function(a, b):
+        ...
+>>>class Something(object):
+        a = attr.ib(validator=type_validator(), type=typing.Callable)  # Will work for any callable
+        b = attr.ib(
+            validator=type_validator(), type=typing.Callable[[int, int], str]
+        )
+
+>>> Something(a=un_annonated_function, b=fully_annotated_function)
+```
+
+`TypeVars` or `Generics` are not supported yet but there are plans to support this in the future.
 
 ## Building
 
