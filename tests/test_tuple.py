@@ -45,3 +45,45 @@ def test_tuple_of_tuple_raises():
         "in typing.Tuple[typing.Tuple[int, int], typing.Tuple[int, int]]. "
         "Expected 2 received 3 in ((1, 2), (3, 4, 5))>"
     ) == repr(error.value)
+
+
+def test_variable_length_tuple():
+    element = (1, 2, 3, 4)
+
+    attr = MagicMock()
+    attr.name = "foo"
+    attr.type = Tuple[int, ...]
+
+    validator = type_validator()
+
+    validator(None, attr, element)
+
+
+def test_variable_length_tuple_empty():
+    element = ()
+
+    attr = MagicMock()
+    attr.name = "foo"
+    attr.type = Tuple[int, ...]
+
+    validator = type_validator()
+
+    validator(None, attr, element)
+
+
+def test_variable_length_tuple_raises():
+    element = (1, 2, 3, "4")
+
+    attr = MagicMock()
+    attr.name = "foo"
+    attr.type = Tuple[int, ...]
+
+    validator = type_validator()
+
+    with pytest.raises(ValueError) as error:
+        validator(None, attr, element)
+
+    assert (
+        "<foo must be typing.Tuple[int, ...] (got 4 that is a {}) "
+        "in (1, 2, 3, '4')>"
+    ).format(str) == repr(error.value)
