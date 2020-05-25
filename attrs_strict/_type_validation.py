@@ -105,6 +105,9 @@ def _handle_dict(attribute, container, expected_type):
 
 def _handle_tuple(attribute, container, expected_type):
     tuple_types = expected_type.__args__
+    if len(tuple_types) == 2 and tuple_types[1] == Ellipsis:
+        element_type = tuple_types[0]
+        tuple_types = (element_type, ) * len(container)
 
     if len(container) != len(tuple_types):
         raise TupleError(container, attribute.type, tuple_types)
