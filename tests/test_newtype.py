@@ -10,7 +10,7 @@ except ImportError:
     from mock import Mock as MagicMock
 
 
-@pytest.mark.parametrize("test_type, correct", [(str, "foo"), (int, 42),])
+@pytest.mark.parametrize("test_type, correct", [(str, "foo"), (int, 42)])
 def test_typing_newtype_single_validation_success(test_type, correct):
     SomeNew = typing.NewType("SomeNew", test_type)
 
@@ -23,7 +23,7 @@ def test_typing_newtype_single_validation_success(test_type, correct):
 
 
 @pytest.mark.parametrize(
-    "test_type, wrongs", [(str, [42, True]), (int, ["foo", ()]),]
+    "test_type, wrongs", [(str, [42, True]), (int, ["foo", ()])]
 )
 def test_typing_newtype_single_validation_failure(test_type, wrongs):
     SomeNew = typing.NewType("SomeNew", test_type)

@@ -5,6 +5,7 @@
 from ._error import (
     AttributeTypeError,
     BadTypeError,
+    CallableError,
     TupleError,
     TypeValidationError,
     UnionError,
@@ -19,6 +20,7 @@ __all__ = [
     "UnionError",
     "TupleError",
     "TypeValidationError",
+    "CallableError",
 ]
 
 # -----------------------------------------------------------------------------
