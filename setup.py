@@ -1,3 +1,4 @@
+import os
 import textwrap
 
 from setuptools import setup
@@ -22,6 +23,7 @@ setup(
     author_email="eseulean@bloomberg.net",
     license="Apache 2.0",
     packages=["attrs_strict"],
+    include_package_data=True,
     install_requires=["attrs", "typing; python_version<'3.5'"],
     tests_require=["mock", "pytest"],
     python_requires=">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*, <4",

@@ -19,12 +19,14 @@ except ImportError:
 try:
     from inspect import signature
 except ImportError:
-    from funcsigs import signature
+    # silencing type error so mypy doesn't complain about duplicate import
+    from funcsigs import signature  # type: ignore
 
 try:
     from itertools import zip_longest
 except ImportError:
-    from itertools import izip_longest as zip_longest
+    # silencing type error so mypy doesn't complain about duplicate import
+    from itertools import izip_longest as zip_longest  # type: ignore
 
 
 class SimilarTypes:
@@ -64,29 +66,34 @@ def type_validator(empty_ok=True):
 
 
 def _validate_elements(attribute, value, expected_type):
-    base_type = _get_base_type(expected_type)
-
-    if base_type is None or base_type == typing.Any:
+    if expected_type is None:
         return
 
-    if base_type != typing.Union and not isinstance(value, base_type):
+    base_type = _get_base_type(expected_type)
+
+    if base_type == typing.Any:
+        return
+
+    if base_type != typing.Union and not isinstance(
+        value, base_type
+    ):  # type: ignore
         raise AttributeTypeError(value, attribute)
 
-    if base_type in SimilarTypes.List:
+    if base_type == typing.Union:  # type: ignore
+        _handle_union(attribute, value, expected_type)
+    elif base_type in SimilarTypes.List:
         _handle_set_or_list(attribute, value, expected_type)
     elif base_type in SimilarTypes.Dict:
         _handle_dict(attribute, value, expected_type)
     elif base_type in SimilarTypes.Tuple:
         _handle_tuple(attribute, value, expected_type)
-    elif base_type == typing.Union:
-        _handle_union(attribute, value, expected_type)
-    elif base_type in SimilarTypes.Callable:
+    elif base_type in SimilarTypes.Callable:  # type: ignore
         _handle_callable(attribute, value, expected_type)
 
 
 def _get_base_type(type_):
     if hasattr(type_, "__origin__") and type_.__origin__ is not None:
-        base_type = type_.__origin__
+        base_type = type_.__origin__  # type: typing.Type[typing.Any]
     elif is_newtype(type_):
         base_type = type_.__supertype__
     else:
@@ -104,7 +111,7 @@ def _type_matching(actual, expected):
 
     base_type = _get_base_type(expected)
 
-    if base_type == typing.Union:
+    if base_type == typing.Union:  # type: ignore
         return any(
             _type_matching(actual, expected_candidate)
             for expected_candidate in expected.__args__
@@ -132,11 +139,11 @@ def _handle_callable(attribute, callable_, expected_type):
         param.annotation for param in _signature.parameters.values()
     ]
     callable_args.append(_signature.return_annotation)
-    if not expected_type.__args__:
+    if not expected_type.__args__:  # type: ignore
         return  # No annotations specified on type, matches all Callables
 
     for callable_arg, expected_arg in zip_longest(
-        callable_args, expected_type.__args__
+        callable_args, expected_type.__args__  # type: ignore
     ):
         if not _type_matching(callable_arg, expected_arg):
             raise CallableError(
@@ -145,7 +152,7 @@ def _handle_callable(attribute, callable_, expected_type):
 
 
 def _handle_set_or_list(attribute, container, expected_type):
-    (element_type,) = expected_type.__args__
+    (element_type,) = expected_type.__args__  # type: ignore
 
     for element in container:
         try:
@@ -156,7 +163,7 @@ def _handle_set_or_list(attribute, container, expected_type):
 
 
 def _handle_dict(attribute, container, expected_type):
-    key_type, value_type = expected_type.__args__
+    key_type, value_type = expected_type.__args__  # type: ignore
 
     for key in container:
         try:
@@ -168,10 +175,10 @@ def _handle_dict(attribute, container, expected_type):
 
 
 def _handle_tuple(attribute, container, expected_type):
-    tuple_types = expected_type.__args__
+    tuple_types = expected_type.__args__  # type: ignore
     if len(tuple_types) == 2 and tuple_types[1] == Ellipsis:
         element_type = tuple_types[0]
-        tuple_types = (element_type, ) * len(container)
+        tuple_types = (element_type,) * len(container)
 
     if len(container) != len(tuple_types):
         raise TupleError(container, attribute.type, tuple_types)

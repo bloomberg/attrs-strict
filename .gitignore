@@ -17,6 +17,7 @@ __pycache__
 /.vscode
 
 # tools
-/.*_cache
+.*_cache
+
 
 pip-wheel-metadata
