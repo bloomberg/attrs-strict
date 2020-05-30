@@ -2,9 +2,9 @@ name: publish
 on:
   push:
     branches-ignore:
-      - *
+      - "*"
     tags:
-      - *
+      - "*"
 
 jobs:
   publish:
