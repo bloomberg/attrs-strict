@@ -1,0 +1,66 @@
+name: check
+on:
+  push:
+  pull_request:
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-python@v2
+    - name: set PY
+      run: echo "::set-env name=PY::$(python -c 'import hashlib, sys;print(hashlib.sha256(sys.version.encode()+sys.executable.encode()).hexdigest())')"
+    - uses: actions/cache@v2
+      with:
+        path: ~/.cache/pre-commit
+        key: pre-commit|${{ env.PY }}|${{ hashFiles('.pre-commit-config.yaml') }}
+    - uses: pre-commit/action@v1.1.0
+
+  test:
+    name: ${{ matrix.os }}-Python${{ matrix.py }}
+    runs-on: ${{ matrix.os }}-latest
+    strategy:
+      matrix:
+        os:
+        - Ubuntu
+        - Windows
+        - MacOS
+        py:
+        - 3.8
+        - 3.7
+        - 3.6
+        - pypy2
+        - pypy3
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python ${{ matrix.py }}
+      uses: actions/setup-python@v2
+      with:
+        python-version: ${{ matrix.py }}
+    - name: install tox
+      run: python -m pip install tox
+    - name: run test suite for ${{ matrix.os }}-${{ matrix.py }}
+      run: python -m tox -e py
+
+  check:
+    name: check ${{ matrix.tox_env }}
+    runs-on: Ubuntu-latest
+    strategy:
+      matrix:
+        tox_env:
+        - readme
+        - docs
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: setup Python 3.8
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.8
+    - name: install tox
+      run: python -m pip install tox
+    - name: run check for ${{ matrix.tox_env }}
+      run: python -m tox -e ${{ matrix.tox_env }}
