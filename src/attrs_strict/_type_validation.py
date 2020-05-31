@@ -74,9 +74,9 @@ def _validate_elements(attribute, value, expected_type):
     if base_type == typing.Any:
         return
 
-    if base_type != typing.Union and not isinstance(
+    if base_type != typing.Union and not isinstance(  # type: ignore
         value, base_type
-    ):  # type: ignore
+    ):
         raise AttributeTypeError(value, attribute)
 
     if base_type == typing.Union:  # type: ignore

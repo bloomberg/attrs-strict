@@ -10,7 +10,7 @@ build-backend = 'setuptools.build_meta'
 line-length = 80
 
 [tool.setuptools_scm]
-write_to = "attrs_strict/_version.py"
+write_to = "src/attrs_strict/_version.py"
 write_to_template = """
 \"\"\" Version information \"\"\"
 

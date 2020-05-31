@@ -1,3 +1,0 @@
-include attrs_strict/py.typed
-recursive-include attrs_strict *.pyi
-recursive-include attrs_strict *.py
