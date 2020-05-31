@@ -24,18 +24,26 @@ class BadTypeError(TypeValidationError, ValueError):
 
 
 class AttributeTypeError(BadTypeError):
-    def __init__(self, container, attribute):
+    def __init__(self, value, attribute):
         super(AttributeTypeError, self).__init__()
-        self.container = container
+        self.value = value
         self.attribute = attribute
 
     def __str__(self):
-        error = "{} must be {} (got {} that is a {})".format(
-            self.attribute.name,
-            format_type(self.attribute.type),
-            self.container,
-            type(self.container),
-        )
+        if self.attribute.type is None:
+            error = (
+                "attrs-strict error: AttributeTypeError was "
+                "raised on an attribute ({}) with no defined type".format(
+                    self.attribute.name
+                )
+            )
+        else:
+            error = "{} must be {} (got {} that is a {})".format(
+                self.attribute.name,
+                format_type(self.attribute.type),
+                self.value,
+                type(self.value),
+            )
 
         return self._render(error)
 
@@ -77,11 +85,19 @@ class EmptyError(BadTypeError):
         self.attribute = attribute
 
     def __str__(self):
-        error = "{} can not be empty and must be {} (got {})".format(
-            self.attribute.name,
-            format_type(self.attribute.type),
-            self.container,
-        )
+        if self.attribute.type is None:
+            error = (
+                "attrs-strict error: AttributeTypeError was "
+                "raised on an attribute ({}) with no defined type".format(
+                    self.attribute.name
+                )
+            )
+        else:
+            error = "{} can not be empty and must be {} (got {})".format(
+                self.attribute.name,
+                format_type(self.attribute.type),
+                self.container,
+            )
 
         return self._render(error)
 
