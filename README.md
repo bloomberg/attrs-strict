@@ -3,10 +3,10 @@
 PyPi](https://badge.fury.io/py/attrs-strict.svg)](https://badge.fury.io/py/attrs-strict)
 [![Supported Python
 versions](https://img.shields.io/pypi/pyversions/attrs-strict.svg)](https://pypi.org/project/attrs-strict/)
-[![Travis build
-status](https://travis-ci.com/bloomberg/attrs-strict.svg?branch=master)](https://travis-ci.com/bloomberg/attrs-strict.svg?branch=master)
+[![Build Status](https://github.com/bloomberg/attrs-strict/workflows/check/badge.svg)](https://github.com/bloomberg/attrs-strict/actions)
 [![Code style:
 black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
+
 # attrs runtime validation
 
 `attrs-strict` is a Python package that contains runtime validation for [`attrs`]((https://github.com/python-attrs/attrs)) data classes based on the types existing in the typing module.
