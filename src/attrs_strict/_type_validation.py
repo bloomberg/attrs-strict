@@ -1,6 +1,8 @@
 import collections
 import typing
 
+import attr
+
 from ._commons import is_newtype
 from ._error import (
     AttributeTypeError,
@@ -28,6 +30,15 @@ except ImportError:
     # silencing type error so mypy doesn't complain about duplicate import
     from itertools import izip_longest as zip_longest  # type: ignore
 
+try:
+    from typing import ForwardRef  # type: ignore # Not in stubs
+except ImportError:
+    from typing import _ForwardRef as ForwardRef  # type: ignore # Not in stubs
+
+
+class _StringAnnotationError(Exception):
+    """Raised when we find string annotations in a class."""
+
 
 class SimilarTypes:
     Dict = {
@@ -46,6 +57,26 @@ class SimilarTypes:
     Callable = {typing.Callable, Callable}
 
 
+def resolve_types(cls, global_ns=None, local_ns=None):
+    """
+    Resolve any strings and forward annotations in type annotations.
+
+    :param type cls: Class to resolve.
+    :param globalns: Dictionary containing global variables, if needed.
+    :param localns: Dictionary containing local variables, if needed.
+    :raise TypeError: If *cls* is not a class.
+    :raise attr.exceptions.NotAnAttrsClassError: If *cls* is not an ``attrs``
+           class.
+    :raise NameError: If types cannot be resolved because of missing variables.
+
+    """
+    hints = typing.get_type_hints(cls, globalns=global_ns, localns=local_ns)
+    for field in attr.fields(cls):
+        if field.name in hints:
+            # Since fields have been frozen we must work around it.
+            object.__setattr__(field, "type", hints[field.name])
+
+
 def type_validator(empty_ok=True):
     """
     Validates the attributes using the type argument specified. If the
@@ -60,7 +91,11 @@ def type_validator(empty_ok=True):
         if not empty_ok and not field:
             raise EmptyError(field, attribute)
 
-        _validate_elements(attribute, field, attribute.type)
+        try:
+            _validate_elements(attribute, field, attribute.type)
+        except _StringAnnotationError:
+            resolve_types(type(instance))
+            _validate_elements(attribute, field, attribute.type)
 
     return _validator
 
@@ -73,6 +108,11 @@ def _validate_elements(attribute, value, expected_type):
 
     if base_type == typing.Any:
         return
+
+    if isinstance(base_type, (str, ForwardRef)):
+        # These base_types happen when you have string annotations and cannot
+        # be used in isinstance.
+        raise _StringAnnotationError()
 
     if base_type != typing.Union and not isinstance(  # type: ignore
         value, base_type
