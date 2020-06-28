@@ -1,6 +1,11 @@
 import typing
 import attr
 
+def resolve_types(
+    cls: type,
+    global_ns: typing.Optional[typing.Dict[str, typing.Any]] = None,
+    local_ns: typing.Optional[typing.Dict[str, typing.Any]] = None,
+) -> None: ...
 def type_validator(
     empty_ok: bool = True,
 ) -> typing.Callable[
