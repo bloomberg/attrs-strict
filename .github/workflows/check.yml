@@ -39,10 +39,16 @@ jobs:
       uses: actions/setup-python@v2
       with:
         python-version: ${{ matrix.py }}
+    - name: pick environment to run
+      run: |
+        import subprocess; import json
+        major, minor, impl = json.loads(subprocess.check_output(["python", "-c", "import json; import sys; import platform; print(json.dumps([sys.version_info[0], sys.version_info[1], platform.python_implementation()]));"], universal_newlines=True))
+        print('::set-env name=TOXENV::' + ("py" if impl == "CPython" else "pypy") + ("{}{}".format(major, minor) if impl == "CPython" else ("3" if major == 3 else "")))
+      shell: python
     - name: setup test suite for ${{ matrix.os }}-${{ matrix.py }}
-      run: tox -vve py --notest
+      run: tox -vv --notest
     - name: run test suite for ${{ matrix.os }}-${{ matrix.py }}
-      run: tox -e py
+      run: tox --skip-pkg-install
 
   check:
     name: check ${{ matrix.tox_env }}
