@@ -14,9 +14,9 @@ from ._error import (
 )
 
 try:
-    from collections.abc import Mapping, MutableMapping, Callable
+    from collections.abc import Callable, Mapping, MutableMapping
 except ImportError:
-    from collections import Mapping, MutableMapping, Callable
+    from collections import Callable, Mapping, MutableMapping
 
 try:
     from inspect import signature

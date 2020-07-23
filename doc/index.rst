@@ -23,31 +23,31 @@ If the type argument is not specified no validation takes place.
 
 .. code-block:: python
 
-  from typing import List
+   from typing import List
+   import attr
+   from attrs_strict import type_validator
 
-  import attr
 
-  from attrs_strict import type_validator, ContainerError
+   @attr.s
+   class SomeClass(object):
+       list_of_numbers = attr.ib(validator=type_validator(), type=List[int])
 
-  >>> @attr.s
-  ... class SomeClass(object):
-  ...     list_of_numbers = attr.ib(
-  ...         validator=type_validator(),
-  ...         type=List[int]
-  ...     )
-  ...
 
-  >>> sc = SomeClass([1,2,3,4])
-  >>> sc
-  SomeClass(list_of_numbers=[1, 2, 3, 4])
+   sc = SomeClass([1, 2, 3, 4])
+   print(sc)
+   SomeClass(list_of_numbers=[1, 2, 3, 4])
 
-  >>> SomeClass([1,2,3,'four'])
-  attrs_strict._error.AttributeTypeError(
-    "list_of_numbers must be typing.List[int]"
-    "(got four that is a <class 'str'>) in [1, 2, 3, 'four']"
-  )
+   try:
+       SomeClass([1, 2, 3, "four"])
+   except ValueError as exception:
+       print(repr(exception))
 
-Nested type exceptions are validated acordingly, and a backtrace to the initial
+.. code-block:: console
+
+   SomeClass(list_of_numbers=[1, 2, 3, 4])
+   <list_of_numbers must be typing.List[int] (got four that is a <class 'str'>) in [1, 2, 3, 'four']>
+
+Nested type exceptions are validated accordingly, and a backtrace to the initial
 container is maintained to ease with debugging. This means that if an exception
 occurs because a nested element doesn't have the correct type, the representation
 of the exception will contain the path to the specific element that caused the exception.
@@ -55,28 +55,28 @@ of the exception will contain the path to the specific element that caused the e
 .. code-block:: python
 
   from typing import List, Tuple
-
   import attr
+  from attrs_strict import type_validator
 
-  from attrs_strict import type_validator, ContainerError
 
-  >>> @attr.s
-  ... class SomeClass(object):
-  ...     names = attr.ib(
-  ...        validator=type_validator(), type=List[Tuple[str, str]]
-  ...     )
+  @attr.s
+  class SomeClass(object):
+      names = attr.ib(validator=type_validator(), type=List[Tuple[str, str]])
 
-  >>> sc = SomeClass(names=[('Moo', 'Moo'), ('Zoo',123)])
-  attrs_strict._error.AttributeTypeError(
-    "names must be"
-    "typing.List[typing.Tuple[str, str]] (got 123 that is a <class 'int'>) in"
-    "('Zoo', 123) in [('Moo', 'Moo'), ('Zoo', 123)]"
-  )
+
+  try:
+      SomeClass(names=[("Moo", "Moo"), ("Zoo", 123)])
+  except ValueError as exception:
+      print(exception)
+
+.. code-block:: console
+
+   names must be typing.List[typing.Tuple[str, str]] (got 123 that is a <class 'int'>) in ('Zoo', 123) in [('Moo', 'Moo'), ('Zoo', 123)]
 
 What is currently supported ?
 -----------------------------
 
-Currently there's support for builtin types and types specified in the :code:`typing`
+Currently, there's support for builtin types and types specified in the :code:`typing`
 module: :code:`List`, :code:`Dict`, :code:`DefaultDict`, :code:`Set`, :code:`Union`,
 :code:`Tuple`, :code:`NewType` and any combination of them. This means that you can
 specify nested types like :code:`List[List[Dict[int, str]]]` and the validation would
