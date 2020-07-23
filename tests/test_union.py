@@ -1,3 +1,4 @@
+import sys
 from typing import List, Union
 
 import pytest
@@ -22,8 +23,11 @@ except ImportError:
             [1, 2, "p"],
             List[Union[None, int]],
             (
-                "Value of foo p is not of type typing.Union[NoneType, int] "
-                "in [1, 2, 'p']"
+                "Value of foo p is not of type {} in [1, 2, 'p']".format(
+                    "typing.Optional[int]"
+                    if sys.version_info >= (3, 9)
+                    else "typing.Union[NoneType, int]"
+                )
             ),
         ),
     ],
