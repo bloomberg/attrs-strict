@@ -4,6 +4,7 @@
 PyPi](https://badge.fury.io/py/attrs-strict.svg)](https://badge.fury.io/py/attrs-strict)
 [![Supported Python
 versions](https://img.shields.io/pypi/pyversions/attrs-strict.svg)](https://pypi.org/project/attrs-strict/)
+[![PyPI - Implementation](https://img.shields.io/pypi/implementation/attrs-strict?style=flat-square)](https://pypi.org/project/attrs-strict)
 [![Build Status](https://github.com/bloomberg/attrs-strict/workflows/check/badge.svg)](https://github.com/bloomberg/attrs-strict/actions)
 [![Code style:
 black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
