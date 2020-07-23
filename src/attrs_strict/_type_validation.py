@@ -179,7 +179,7 @@ def _handle_callable(attribute, callable_, expected_type):
         param.annotation for param in _signature.parameters.values()
     ]
     callable_args.append(_signature.return_annotation)
-    if not expected_type.__args__:  # type: ignore
+    if not getattr(expected_type, "__args__", None):  # type: ignore
         return  # No annotations specified on type, matches all Callables
 
     for callable_arg, expected_arg in zip_longest(
