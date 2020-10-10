@@ -140,3 +140,18 @@ class UnionError(BadTypeError):
         )
 
         return self._render(error)
+
+
+class LiteralError(BadTypeError):
+    def __init__(self, attribute, value, literals):
+        super(LiteralError, self).__init__()
+        self.attribute = attribute
+        self.value = value
+        self.literals = literals
+
+    def __str__(self):
+        error = "Value of {}, {} is not any of the literals specified {}".format(
+            self.attribute, self.value, self.literals
+        )
+
+        return self._render(error)

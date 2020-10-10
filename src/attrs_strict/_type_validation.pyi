@@ -29,6 +29,11 @@ def _get_base_type(
 def _type_matching(
     actual: typing.Type[typing.Any], expected: typing.Type[typing.Any]
 ) -> bool: ...
+def _handle_literal(
+    attribute: attr.Attribute[typing.Any],
+    value: typing.Any,
+    expected_type: typing.Type[typing.Any],
+) -> None: ...
 def _handle_callable(
     attribute: attr.Attribute[typing.Any],
     callable_: typing.Callable[..., typing.Any],

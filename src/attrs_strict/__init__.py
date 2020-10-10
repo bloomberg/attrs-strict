@@ -9,6 +9,7 @@ from ._error import (
     TupleError,
     TypeValidationError,
     UnionError,
+    LiteralError
 )
 from ._type_validation import type_validator
 from ._version import __version__  # noqa

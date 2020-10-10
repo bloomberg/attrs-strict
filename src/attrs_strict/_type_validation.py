@@ -11,6 +11,7 @@ from ._error import (
     EmptyError,
     TupleError,
     UnionError,
+    LiteralError
 )
 
 try:
@@ -114,12 +115,15 @@ def _validate_elements(attribute, value, expected_type):
         # be used in isinstance.
         raise _StringAnnotationError()
 
-    if base_type != typing.Union and not isinstance(  # type: ignore
+    elif base_type == typing.Literal:
+        _handle_literal(attribute, value, expected_type)
+
+    elif base_type != typing.Union and not isinstance(  # type: ignore
         value, base_type
     ):
         raise AttributeTypeError(value, attribute)
 
-    if base_type == typing.Union:  # type: ignore
+    elif base_type == typing.Union:  # type: ignore
         _handle_union(attribute, value, expected_type)
     elif base_type in SimilarTypes.List:
         _handle_set_or_list(attribute, value, expected_type)
@@ -171,6 +175,19 @@ def _type_matching(actual, expected):
         )
 
     return False
+
+
+def _handle_literal(attribute, literal, expected_type):
+    literals = None
+    if hasattr(expected_type, '__args__'):  # python 3
+        literals = getattr(expected_type, "__args__", None)
+    elif hasattr(expected_type, '__values__'):  # python 2
+        literals = getattr(expected_type, "__values__", None)
+
+    if literals is None:
+        return
+    if literal not in literals:
+        raise LiteralError(attribute, literal, literals)
 
 
 def _handle_callable(attribute, callable_, expected_type):

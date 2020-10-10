@@ -77,7 +77,7 @@ What is currently supported ?
 -----------------------------
 
 Currently, there's support for builtin types and types specified in the :code:`typing`
-module: :code:`List`, :code:`Dict`, :code:`DefaultDict`, :code:`Set`, :code:`Union`,
+module: :code:`Literal`, :code:`List`, :code:`Dict`, :code:`DefaultDict`, :code:`Set`, :code:`Union`,
 :code:`Tuple`, :code:`NewType` and any combination of them. This means that you can
 specify nested types like :code:`List[List[Dict[int, str]]]` and the validation would
 check if attribute has the specific type.
