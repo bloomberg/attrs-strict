@@ -31,7 +31,7 @@ except ImportError:
     from itertools import izip_longest as zip_longest  # type: ignore
 
 try:
-    from typing import ForwardRef  # type: ignore # Not in stubs
+    from typing import ForwardRef
 except ImportError:
     from typing import _ForwardRef as ForwardRef  # type: ignore # Not in stubs
 
@@ -179,7 +179,7 @@ def _handle_callable(attribute, callable_, expected_type):
         param.annotation for param in _signature.parameters.values()
     ]
     callable_args.append(_signature.return_annotation)
-    if not getattr(expected_type, "__args__", None):  # type: ignore
+    if not getattr(expected_type, "__args__", None):
         return  # No annotations specified on type, matches all Callables
 
     for callable_arg, expected_arg in zip_longest(

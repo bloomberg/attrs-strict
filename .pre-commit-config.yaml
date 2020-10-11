@@ -39,3 +39,8 @@ repos:
     rev: v1.6.0
     hooks:
     -   id: rst-backticks
+- repo: https://github.com/tox-dev/tox-ini-fmt
+  rev: "0.5.0"
+  hooks:
+    - id: tox-ini-fmt
+      args: ["-p", "fix_lint"]
