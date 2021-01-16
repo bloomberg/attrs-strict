@@ -102,15 +102,19 @@ names must be typing.List[typing.Tuple[str, str]] (got 123 that is a <class 'int
 ### What is currently supported ?
 
 Currently, there's support for simple types and types specified in the `typing`
-module: `List`, `Dict`, `DefaultDict`, `Set`, `Union`, `Tuple`, `NewType`,
-`Callable` and any combination of them. This means that you can specify nested
-types like `List[List[Dict[int, str]]]` and the validation would check if
-attribute has the specific type.
+module: `List`, `Dict`, `DefaultDict`, `Set`, `Union`, `Tuple`, `NewType`
+`Callable`, `Literal` and any combination of them. This means that you can
+specify nested types like `List[List[Dict[int, str]]]` and the validation would
+check if attribute has the specific type.
 
 `Callable` will validate if the callable function's annotation matches the type
 definition. If type does not specify any annotations then all callables will
 pass the validation against it. Support for `Callable` is not available for
 `python2`.
+
+`Literal` only allows using instances of `int`, `str`, `bool`, `Enum` or valid
+`Literal` types. Type checking `Literal` with any other type as argument raises
+`attrs_strict._error.UnsupportedLiteralError`.
 
 ```python
 def fully_annotated_function(self, a: int, b: int) -> str:

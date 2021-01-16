@@ -1,6 +1,12 @@
+import sys
 import typing
 
 import attr
+
+try:
+    from typing import Literal
+except ImportError:
+    from typing_extensions import Literal
 
 def resolve_types(
     cls: type,
@@ -9,9 +15,7 @@ def resolve_types(
 ) -> None: ...
 def type_validator(
     empty_ok: bool = True,
-) -> typing.Callable[
-    [typing.Any, attr.Attribute[typing.Any], typing.Any], None
-]:
+) -> typing.Callable[[typing.Any, attr.Attribute[typing.Any], typing.Any], None]:
     def _validator(
         instance: typing.Any,
         attribute: attr.Attribute[typing.Any],
@@ -27,9 +31,7 @@ def _validate_elements(
 def _get_base_type(
     type_: typing.Type[typing.Any],
 ) -> typing.Type[typing.Any]: ...
-def _type_matching(
-    actual: typing.Type[typing.Any], expected: typing.Type[typing.Any]
-) -> bool: ...
+def _type_matching(actual: typing.Type[typing.Any], expected: typing.Type[typing.Any]) -> bool: ...
 def _handle_callable(
     attribute: attr.Attribute[typing.Any],
     callable_: typing.Callable[..., typing.Any],
@@ -64,3 +66,11 @@ def _handle_union(
     value: typing.Any,
     expected_type: typing.Type[typing.Any],
 ) -> None: ...
+def _handle_literal(
+    attribute: attr.Attribute[typing.Any],
+    value: typing.Any,
+    expected_type: typing.Type[typing.Any],
+) -> None: ...
+def _flatten_literals(
+    literals: typing.Type[Literal],
+) -> typing.List[typing.Any]: ...
