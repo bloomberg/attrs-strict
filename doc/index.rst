@@ -14,7 +14,8 @@ Getting started
 
 Run :code:`pip install attrs-strict` to install the latest stable version from PyPi.
 The source code is hosted on github at `<https://github.com/bloomberg/attrs-strict>`_.
-The library currently supports :code:`Python2.7`, :code:`Python3.6` and :code:`Python3.7`.
+The library currently supports :code:`Python2.7`, :code:`Python3.6`, :code:`Python3.7`,
+:code:`Python3.8` and :code:`Python3.9`.
 
 Usage and examples
 ------------------
@@ -78,12 +79,17 @@ What is currently supported ?
 
 Currently, there's support for builtin types and types specified in the :code:`typing`
 module: :code:`List`, :code:`Dict`, :code:`DefaultDict`, :code:`Set`, :code:`Union`,
-:code:`Tuple`, :code:`NewType` and any combination of them. This means that you can
-specify nested types like :code:`List[List[Dict[int, str]]]` and the validation would
-check if attribute has the specific type.
+:code:`Tuple`, :code:`NewType`, :code:`Callable`, :code:`Literal` and any combination
+of them. This means that you can specify nested types like :code:`List[List[Dict[int, str]]]`
+and the validation would check if attribute has the specific type.
 
-:code:`Callables`, :code:`TypeVars` or :code:`Generics` are not supported yet but
-there are plans to support this in the future.
+:code:`TypeVars` or :code:`Generics` are not supported yet but there are plans to support this
+in the future.
+
+.. warning::
+    :code:`Literal` only allows using instances of :code:`int`, :code:`str`, :code:`bool`,
+    :code:`Enum` or valid :code:`Literal` types. Type checking :code:`Literal` with any other
+    type as argument raises :code:`attrs_strict._error.UnsupportedLiteralError`.
 
 .. toctree::
    :maxdepth: 1
