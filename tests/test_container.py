@@ -76,8 +76,8 @@ def test_raises_when_container_is_empty_and_empty_ok_is_false():
         validator(None, attr, items)
 
     # THEN
-    assert "Smth can not be empty and must be str"
-    "(got None)" == str(error.value)
+    msg = "Smth can not be empty and must be {} (got [])".format(str)
+    assert msg == str(error.value)
 
 
 def test_no_type_specified_is_fine():
