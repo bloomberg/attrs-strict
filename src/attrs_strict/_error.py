@@ -32,8 +32,8 @@ class AttributeTypeError(BadTypeError):
     def __str__(self):
         if self.attribute.type is None:
             error = (
-                "attrs-strict error: AttributeTypeError was "
-                "raised on an attribute ({}) with no defined type".format(
+                "attrs-strict error: AttributeTypeError was raised on an"
+                " attribute ({}) with no defined type".format(
                     self.attribute.name
                 )
             )
@@ -66,14 +66,14 @@ class CallableError(BadTypeError):
 
     def __str__(self):
         error_msg = (
-            "Error with: {} . Expected Callable "
-            "signature: {} got: {}. {} should be {}"
-        ).format(
-            self.attribute.name,
-            self.expected_signature,
-            self.callable_signature,
-            self.mismatch_callable_arg,
-            self.expected_callable_arg,
+            "Error with: {} . Expected Callable signature: {} "
+            "got: {}. {} should be {}".format(
+                self.attribute.name,
+                self.expected_signature,
+                self.callable_signature,
+                self.mismatch_callable_arg,
+                self.expected_callable_arg,
+            )
         )
         return self._render(error_msg)
 
@@ -87,8 +87,8 @@ class EmptyError(BadTypeError):
     def __str__(self):
         if self.attribute.type is None:
             error = (
-                "attrs-strict error: AttributeTypeError was "
-                "raised on an attribute ({}) with no defined type".format(
+                "attrs-strict error: AttributeTypeError was raised on an"
+                " attribute ({}) with no defined type".format(
                     self.attribute.name
                 )
             )
@@ -111,14 +111,14 @@ class TupleError(BadTypeError):
 
     def __str__(self):
         error = (
-            "Element {} has {} elements than types "
-            "specified in {}. Expected {} received {}"
-        ).format(
-            self.container,
-            self._more_or_less(),
-            self.attribute,
-            len(self.tuple_types),
-            len(self.container),
+            "Element {} has {} elements than types specified in {}. "
+            "Expected {} received {}".format(
+                self.container,
+                self._more_or_less(),
+                self.attribute,
+                len(self.tuple_types),
+                len(self.container),
+            )
         )
 
         return self._render(error)
@@ -135,9 +135,8 @@ class UnionError(BadTypeError):
         self.expected_type = expected_type
 
     def __str__(self):
-        error = "Value of {} {} is not of type {}".format(
-            self.attribute, self.container, self.expected_type
-        )
+        msg = "Value of {} {} is not of type {}"
+        error = msg.format(self.attribute, self.container, self.expected_type)
 
         return self._render(error)
 
@@ -150,10 +149,8 @@ class LiteralError(BadTypeError):
         self.literals = literals
 
     def __str__(self):
-        error = "Value of {} {} is not any of the literals specified {}".format(
-            self.attribute, self.value, self.literals
-        )
-
+        msg = "Value of {} {} is not any of the literals specified {}"
+        error = msg.format(self.attribute, self.value, self.literals)
         return self._render(error)
 
 
@@ -163,10 +160,6 @@ class UnsupportedLiteralError(BadTypeError):
         self.unsupported_literals = unsupported_literals
 
     def __str__(self):
-        error = (
-            "Type checking not supported for literals specified in {}".format(
-                self.unsupported_literals
-            )
-        )
-
+        msg = "Type checking not supported for literals specified in {}"
+        error = msg.format(self.unsupported_literals)
         return self._render(error)
