@@ -1,6 +1,7 @@
-import typing
-import attr
 import inspect
+import typing
+
+import attr
 
 class TypeValidationError(Exception):
     def __repr__(self) -> str: ...
