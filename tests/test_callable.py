@@ -24,6 +24,11 @@ class _TestResources:
 
     int_int_returns_str.__annotations__ = {"a": int, "b": int, "return": str}
 
+    def int_int_returns_none(a, b):
+        pass
+
+    int_int_returns_none.__annotations__ = {"a": int, "b": int, "return": None}
+
     def newint_int_returns_str(a, b):
         pass
 
@@ -108,6 +113,11 @@ class _TestResources:
             typing.Callable[[int, int], str],
         ),
         (
+            "typed_callable_none",
+            _TestResources.int_int_returns_none,
+            typing.Callable[[int, int], None],
+        ),
+        (
             "list_of_typed_callables",
             [_TestResources.int_int_returns_str] * 3,
             typing.List[typing.Callable[[int, int], str]],
@@ -161,6 +171,11 @@ class _TestResources:
         (
             "any_type_str_provided",
             _TestResources.int_int_returns_str,
+            typing.Callable[[int, int], typing.Any],
+        ),
+        (
+            "any_type_none_provided",
+            _TestResources.int_int_returns_none,
             typing.Callable[[int, int], typing.Any],
         ),
         (

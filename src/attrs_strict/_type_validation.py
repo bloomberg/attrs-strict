@@ -155,6 +155,7 @@ def _get_base_type(type_):
 def _type_matching(actual, expected):
     actual = actual.__supertype__ if is_newtype(actual) else actual
     expected = expected.__supertype__ if is_newtype(expected) else expected
+    actual = type(None) if actual is None else actual
 
     if expected == actual or expected == typing.Any:
         return True
