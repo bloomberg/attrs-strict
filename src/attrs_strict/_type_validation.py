@@ -22,10 +22,10 @@ except ImportError:
     from collections import Callable, Mapping, MutableMapping
 
 try:
-    from inspect import Signature, signature
+    from inspect import Parameter, Signature, signature
 except ImportError:
     # silencing type error so mypy doesn't complain about duplicate import
-    from funcsigs import Signature, signature  # type: ignore
+    from funcsigs import Parameter, Signature, signature  # type: ignore
 
 try:
     from itertools import zip_longest
@@ -209,11 +209,32 @@ def _handle_callable(attribute, callable_, expected_type):
         callable_default = (
             empty if callable_arg is None else callable_arg.default
         )
+        callable_kind = empty if callable_arg is None else callable_arg.kind
+
         if expected_arg is None and callable_default is not empty:
             # The callable accepts more arguments than expected, but still
             # matches the expected signature because these arguments are
             # optional (have a default value)
             continue
+
+        if callable_kind == Parameter.KEYWORD_ONLY:
+            # The callable has a keyword-only parameter and either
+            # 1) expected_arg was not None, which means that the Callable type
+            #    hint tries to pass an argument to it (but Callable only works
+            #    with positional arguments)
+            # or
+            # 2) expected_arg is None and callable_default is empty, which
+            #    means that this keyword-only parameter doesn't have a default
+            #    value (so you can't call this function by passing only
+            #    positional arguments)
+            raise CallableError(
+                attribute,
+                _signature,
+                expected_type,
+                callable_kind,
+                expected_arg,
+            )
+
         _handle_callable_arg(
             attribute, _signature, expected_type, callable_type, expected_arg
         )

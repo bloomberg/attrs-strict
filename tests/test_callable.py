@@ -24,6 +24,11 @@ class _TestResources:
 
     int_int_returns_str.__annotations__ = {"a": int, "b": int, "return": str}
 
+    def no_args_returns_str():
+        pass
+
+    no_args_returns_str.__annotations__ = {"return": str}
+
     def int_int_returns_none(a, b):
         pass
 
@@ -33,6 +38,24 @@ class _TestResources:
         pass
 
     int_default_int_returns_str.__annotations__ = {
+        "a": int,
+        "b": int,
+        "return": str,
+    }
+
+    def int_default_kwonly_int_returns_str(a, *, b=1):
+        pass
+
+    int_default_kwonly_int_returns_str.__annotations__ = {
+        "a": int,
+        "b": int,
+        "return": str,
+    }
+
+    def int_kwonly_int_returns_str(a, *, b):
+        pass
+
+    int_kwonly_int_returns_str.__annotations__ = {
         "a": int,
         "b": int,
         "return": str,
@@ -122,6 +145,11 @@ class _TestResources:
             typing.Callable[[int, int], str],
         ),
         (
+            "typed_callable_no_args",
+            _TestResources.no_args_returns_str,
+            typing.Callable[[], str],
+        ),
+        (
             "typed_callable_none",
             _TestResources.int_int_returns_none,
             typing.Callable[[int, int], None],
@@ -135,6 +163,11 @@ class _TestResources:
             "typed_callable_default_present",
             _TestResources.int_default_int_returns_str,
             typing.Callable[[int, int], str],
+        ),
+        (
+            "typed_callable_kwonly_default_missing",
+            _TestResources.int_default_kwonly_int_returns_str,
+            typing.Callable[[int], str],
         ),
         (
             "list_of_typed_callables",
@@ -225,6 +258,18 @@ def test_callable_not_raises_with_valid_annotations(
             AttributeTypeError,
         ),
         (
+            "callable_with_not_enough_types",
+            _TestResources.int_int_returns_int,
+            typing.Callable[[int, int, int], str],
+            CallableError,
+        ),
+        (
+            "callable_with_too_many_types",
+            _TestResources.int_int_returns_int,
+            typing.Callable[[int], str],
+            CallableError,
+        ),
+        (
             "callable_with_incorrect_types",
             _TestResources.int_int_returns_int,
             typing.Callable[[int, int], str],
@@ -234,6 +279,24 @@ def test_callable_not_raises_with_valid_annotations(
             "callable_with_incorrect_default_types",
             _TestResources.int_default_int_returns_str,
             typing.Callable[[int, str], str],
+            CallableError,
+        ),
+        (
+            "callable_with_provided_default_kwonly_types",
+            _TestResources.int_default_kwonly_int_returns_str,
+            typing.Callable[[int, int], str],
+            CallableError,
+        ),
+        (
+            "callable_with_missing_kwonly_types",
+            _TestResources.int_kwonly_int_returns_str,
+            typing.Callable[[int], str],
+            CallableError,
+        ),
+        (
+            "callable_with_provided_kwonly_types",
+            _TestResources.int_kwonly_int_returns_str,
+            typing.Callable[[int, int], str],
             CallableError,
         ),
         (
