@@ -29,6 +29,15 @@ class _TestResources:
 
     int_int_returns_none.__annotations__ = {"a": int, "b": int, "return": None}
 
+    def int_default_int_returns_str(a, b=1):
+        pass
+
+    int_default_int_returns_str.__annotations__ = {
+        "a": int,
+        "b": int,
+        "return": str,
+    }
+
     def newint_int_returns_str(a, b):
         pass
 
@@ -116,6 +125,16 @@ class _TestResources:
             "typed_callable_none",
             _TestResources.int_int_returns_none,
             typing.Callable[[int, int], None],
+        ),
+        (
+            "typed_callable_default_missing",
+            _TestResources.int_default_int_returns_str,
+            typing.Callable[[int], str],
+        ),
+        (
+            "typed_callable_default_present",
+            _TestResources.int_default_int_returns_str,
+            typing.Callable[[int, int], str],
         ),
         (
             "list_of_typed_callables",
@@ -209,6 +228,12 @@ def test_callable_not_raises_with_valid_annotations(
             "callable_with_incorrect_types",
             _TestResources.int_int_returns_int,
             typing.Callable[[int, int], str],
+            CallableError,
+        ),
+        (
+            "callable_with_incorrect_default_types",
+            _TestResources.int_default_int_returns_str,
+            typing.Callable[[int, str], str],
             CallableError,
         ),
         (

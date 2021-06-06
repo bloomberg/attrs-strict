@@ -22,10 +22,10 @@ except ImportError:
     from collections import Callable, Mapping, MutableMapping
 
 try:
-    from inspect import signature
+    from inspect import Signature, signature
 except ImportError:
     # silencing type error so mypy doesn't complain about duplicate import
-    from funcsigs import signature  # type: ignore
+    from funcsigs import Signature, signature  # type: ignore
 
 try:
     from itertools import zip_longest
@@ -184,22 +184,43 @@ def _type_matching(actual, expected):
     return False
 
 
+def _handle_callable_arg(
+    attribute, _signature, expected_type, actual, expected
+):
+    if not _type_matching(actual, expected):
+        raise CallableError(
+            attribute, _signature, expected_type, actual, expected
+        )
+
+
 def _handle_callable(attribute, callable_, expected_type):
     _signature = signature(callable_)
-    callable_args = [
-        param.annotation for param in _signature.parameters.values()
-    ]
-    callable_args.append(_signature.return_annotation)
+    empty = Signature.empty
+    callable_args = list(_signature.parameters.values())
+    callable_return = _signature.return_annotation
     if not getattr(expected_type, "__args__", None):
         return  # No annotations specified on type, matches all Callables
 
-    for callable_arg, expected_arg in zip_longest(
-        callable_args, expected_type.__args__  # type: ignore
-    ):
-        if not _type_matching(callable_arg, expected_arg):
-            raise CallableError(
-                attribute, _signature, expected_type, callable_arg, expected_arg
-            )
+    *expected_args, expected_return = expected_type.__args__  # type: ignore
+    for callable_arg, expected_arg in zip_longest(callable_args, expected_args):
+        callable_type = (
+            empty if callable_arg is None else callable_arg.annotation
+        )
+        callable_default = (
+            empty if callable_arg is None else callable_arg.default
+        )
+        if expected_arg is None and callable_default is not empty:
+            # The callable accepts more arguments than expected, but still
+            # matches the expected signature because these arguments are
+            # optional (have a default value)
+            continue
+        _handle_callable_arg(
+            attribute, _signature, expected_type, callable_type, expected_arg
+        )
+
+    _handle_callable_arg(
+        attribute, _signature, expected_type, callable_return, expected_return
+    )
 
 
 def _handle_set_or_list(attribute, container, expected_type):

@@ -24,8 +24,8 @@ class CallableError(BadTypeError):
         attribute: attr.Attribute[typing.Any],
         callable_signature: inspect.Signature,
         expected_signature: typing.Type[typing.Callable[..., typing.Any]],
-        mismatch_callable_arg: inspect.Parameter,
-        expected_callable_arg: inspect.Parameter,
+        mismatch_callable_arg: typing.Type[typing.Any],
+        expected_callable_arg: typing.Type[typing.Any],
     ) -> None: ...
     def __str__(self) -> str: ...
 

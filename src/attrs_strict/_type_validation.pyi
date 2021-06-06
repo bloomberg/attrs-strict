@@ -1,3 +1,4 @@
+import inspect
 import sys
 import typing
 
@@ -32,6 +33,13 @@ def _get_base_type(
     type_: typing.Type[typing.Any],
 ) -> typing.Type[typing.Any]: ...
 def _type_matching(actual: typing.Type[typing.Any], expected: typing.Type[typing.Any]) -> bool: ...
+def _handle_callable_arg(
+    attribute: attr.Attribute[typing.Any],
+    _signature: inspect.Signature,
+    expected_type: typing.Type[typing.Callable[..., typing.Any]],
+    actual: typing.Type[typing.Any],
+    expected: typing.Type[typing.Any],
+) -> None: ...
 def _handle_callable(
     attribute: attr.Attribute[typing.Any],
     callable_: typing.Callable[..., typing.Any],
