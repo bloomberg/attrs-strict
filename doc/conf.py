@@ -22,7 +22,6 @@ extensions = [
 ]
 
 templates_path = ["_templates"]
-language = "python"
 
 exclude_patterns = []
 
