@@ -1,15 +1,9 @@
-import sys
 import typing
 
 import attr
 import pytest
 
 from attrs_strict import AttributeTypeError, CallableError, type_validator
-
-not_on_py2 = pytest.mark.xfail(
-    sys.version_info < (3, 5),
-    reason="Type annotations for callables are not supported in py2",
-)
 
 
 class _TestResources:
@@ -110,7 +104,6 @@ class _TestResources:
     int_default_returns_int.__annotations__ = {"a": int, "return": int}
 
 
-@not_on_py2
 @pytest.mark.parametrize(
     "name, callable_, attribute_type",
     [
@@ -247,7 +240,6 @@ def test_callable_not_raises_with_valid_annotations(
     Something(call_me=callable_)
 
 
-@not_on_py2
 @pytest.mark.parametrize(
     "name, callable_, attribute_type, raised_error_type",
     [

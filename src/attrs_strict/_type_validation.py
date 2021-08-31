@@ -201,7 +201,8 @@ def _handle_callable(attribute, callable_, expected_type):
     if not getattr(expected_type, "__args__", None):
         return  # No annotations specified on type, matches all Callables
 
-    *expected_args, expected_return = expected_type.__args__  # type: ignore
+    expected_args = expected_type.__args__[:-1]  # type: ignore
+    expected_return = expected_type.__args__[-1]  # type: ignore
     for callable_arg, expected_arg in zip_longest(callable_args, expected_args):
         callable_type = (
             empty if callable_arg is None else callable_arg.annotation
