@@ -16,7 +16,9 @@ def resolve_types(
 ) -> None: ...
 def type_validator(
     empty_ok: bool = True,
-) -> typing.Callable[[typing.Any, attr.Attribute[typing.Any], typing.Any], None]:
+) -> typing.Callable[
+    [typing.Any, attr.Attribute[typing.Any], typing.Any], None
+]:
     def _validator(
         instance: typing.Any,
         attribute: attr.Attribute[typing.Any],
@@ -32,7 +34,9 @@ def _validate_elements(
 def _get_base_type(
     type_: typing.Type[typing.Any],
 ) -> typing.Type[typing.Any]: ...
-def _type_matching(actual: typing.Type[typing.Any], expected: typing.Type[typing.Any]) -> bool: ...
+def _type_matching(
+    actual: typing.Type[typing.Any], expected: typing.Type[typing.Any]
+) -> bool: ...
 def _handle_callable_arg(
     attribute: attr.Attribute[typing.Any],
     _signature: inspect.Signature,

@@ -1,3 +1,4 @@
+import re
 import sys
 from typing import List, Union
 
@@ -12,7 +13,7 @@ except ImportError:
 
 
 @pytest.mark.parametrize(
-    "element, type_, error_message",
+    ("element", "type_", "error_message"),
     [
         (
             2.0,
@@ -40,15 +41,12 @@ def test_union_when_type_is_not_specified_raises(element, type_, error_message):
     attr.name = "foo"
     attr.type = type_
 
-    with pytest.raises(ValueError) as error:
+    with pytest.raises(ValueError, match=re.escape(error_message)):
         validator(None, attr, element)
-
-    repr_msg = "<{}>".format(error_message)
-    assert repr_msg == repr(error.value)
 
 
 @pytest.mark.parametrize(
-    "element, type_,",
+    ("element", "type_"),
     [
         (2.0, Union[int, float]),
         ([1, 2, None, 4, 5], List[Union[None, int]]),
