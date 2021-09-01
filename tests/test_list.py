@@ -1,3 +1,4 @@
+import re
 from typing import Any, Dict, List, Set, Tuple
 
 import pytest
@@ -11,7 +12,7 @@ except ImportError:
 
 
 @pytest.mark.parametrize(
-    "values, type_, error_message",
+    ("values", "type_", "error_message"),
     [
         (
             [1, 2, "a"],
@@ -65,16 +66,12 @@ def test_list_of_values_raise_value_error(values, type_, error_message):
     attrib.name = "numbers"
     attrib.type = type_
 
-    with pytest.raises(ValueError) as error:
+    with pytest.raises(ValueError, match=re.escape(error_message)):
         validator(None, attrib, values)
-
-    # THEN
-    msg = "<{}>".format(error_message)
-    assert msg == repr(error.value)
 
 
 @pytest.mark.parametrize(
-    "values, type_",
+    ("values", "type_"),
     [
         ([1, 2, 3], List[int]),
         ([[1], [2], [3]], List[List[int]]),

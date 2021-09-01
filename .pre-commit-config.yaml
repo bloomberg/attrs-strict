@@ -1,45 +1,49 @@
 repos:
 -   repo: https://github.com/psf/black
-    rev: 20.8b1
+    rev: 21.8b0
     hooks:
     -   id: black
         args: [--safe]
 -   repo: https://github.com/asottile/blacken-docs
-    rev: v1.9.2
+    rev: v1.11.0
     hooks:
     -   id: blacken-docs
         args: [--skip-errors]
-        additional_dependencies: [black==20.8b1]
+        additional_dependencies: [black==21.8b0]
 -   repo: https://github.com/PyCQA/isort
-    rev: 5.7.0
+    rev: 5.9.3
     hooks:
     -   id: isort
 -   repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v3.4.0
+    rev: v4.0.1
     hooks:
     -   id: trailing-whitespace
     -   id: end-of-file-fixer
     -   id: check-yaml
     -   id: debug-statements
 - repo: https://github.com/PyCQA/flake8
-  rev: 3.8.4
+  rev: 3.9.2
   hooks:
-  - id: flake8
-    additional_dependencies: ["flake8-bugbear == 20.11.1"]
+    - id: flake8
+      additional_dependencies:
+      - flake8-bugbear==21.4.3
+      - flake8-comprehensions==3.5
+      - flake8-pytest-style==1.5
+      - flake8-unused-arguments==0.0.6
 - repo: https://github.com/asottile/setup-cfg-fmt
-  rev: v1.16.0
+  rev: v1.17.0
   hooks:
   - id: setup-cfg-fmt
 -   repo: https://github.com/asottile/pyupgrade
-    rev: v2.9.0
+    rev: v2.25.0
     hooks:
     -   id: pyupgrade
 -   repo: https://github.com/pre-commit/pygrep-hooks
-    rev: v1.7.0
+    rev: v1.9.0
     hooks:
     -   id: rst-backticks
 - repo: https://github.com/tox-dev/tox-ini-fmt
-  rev: "0.5.0"
+  rev: "0.5.1"
   hooks:
     - id: tox-ini-fmt
       args: ["-p", "fix_lint"]

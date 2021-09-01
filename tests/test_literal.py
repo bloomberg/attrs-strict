@@ -1,3 +1,4 @@
+import re
 from enum import Enum
 from typing import Any, List
 
@@ -22,7 +23,7 @@ class Numbers(Enum):
 
 
 @pytest.mark.parametrize(
-    "element, type_, error_message",
+    ("element", "type_", "error_message"),
     [
         pytest.param(
             "c",
@@ -53,15 +54,12 @@ def test_literal_when_type_is_not_specified_raises(
     attr.name = "foo"
     attr.type = type_
 
-    with pytest.raises(ValueError) as error:
+    with pytest.raises(ValueError, match=re.escape(error_message)):
         validator(None, attr, element)
-
-    repr_msg = "<{}>".format(error_message)
-    assert repr_msg == repr(error.value)
 
 
 @pytest.mark.parametrize(
-    "element, type_,",
+    ("element", "type_"),
     [
         pytest.param("enum-a", Literal["enum-a", "enum-b"], id="Literal match"),
         pytest.param(
@@ -98,7 +96,7 @@ def test_literal_not_raise_for_correct_values(element, type_):
 
 
 @pytest.mark.parametrize(
-    "element, type_, error_message",
+    ("element", "type_", "error_message"),
     [
         pytest.param(
             "type",
@@ -138,8 +136,5 @@ def test_literal_raises_for_invalid_type_arguments_to_literal(
     attr.name = "foo"
     attr.type = type_
 
-    with pytest.raises(ValueError) as error:
+    with pytest.raises(ValueError, match=re.escape(error_message)):
         validator(None, attr, element)
-
-    repr_msg = "<{}>".format(error_message)
-    assert repr_msg == repr(error.value)

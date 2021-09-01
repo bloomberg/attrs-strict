@@ -1,3 +1,5 @@
+import re
+
 import attr
 import pytest
 
@@ -5,7 +7,7 @@ from attrs_strict import type_validator
 
 
 @pytest.mark.parametrize(
-    "value, expected, actual",
+    ("value", "expected", "actual"),
     [
         (3, str, int),
         ("five", int, str),
@@ -18,14 +20,11 @@ def test_primitive_types(value, expected, actual):
     class Something(object):
         number = attr.ib(validator=type_validator(), type=expected)
 
-    with pytest.raises(ValueError) as error:
-        Something(number=value)
-
-    assert repr(
-        error.value
-    ) == "<number must be {} (got {} that is a {})>".format(
+    msg = "number must be {} (got {} that is a {})".format(
         expected, value, actual
     )
+    with pytest.raises(ValueError, match=re.escape(msg)):
+        Something(number=value)
 
 
 def test_reassign_evaluate():
@@ -34,10 +33,7 @@ def test_reassign_evaluate():
         number = attr.ib(validator=type_validator(), type=str)
 
     x = Something(number="foo")
-    with pytest.raises(ValueError) as error:
-        x.number = 5
+    msg = "number must be {} (got 5 that is a {})".format(str, int)
+    x.number = 5
+    with pytest.raises(ValueError, match=re.escape(msg)):
         attr.validate(x)
-
-    assert repr(
-        error.value
-    ) == "<number must be {} (got 5 that is a {})>".format(str, int)

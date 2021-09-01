@@ -10,10 +10,10 @@ class _TestResources:
 
     NewInt = typing.NewType("NewType", int)
 
-    def plain_unannotated_callable(a, b):
+    def plain_unannotated_callable(a, b):  # noqa: U100
         pass
 
-    def int_int_returns_str(a, b):
+    def int_int_returns_str(a, b):  # noqa: U100
         pass
 
     int_int_returns_str.__annotations__ = {"a": int, "b": int, "return": str}
@@ -23,12 +23,12 @@ class _TestResources:
 
     no_args_returns_str.__annotations__ = {"return": str}
 
-    def int_int_returns_none(a, b):
+    def int_int_returns_none(a, b):  # noqa: U100
         pass
 
     int_int_returns_none.__annotations__ = {"a": int, "b": int, "return": None}
 
-    def int_default_int_returns_str(a, b=1):
+    def int_default_int_returns_str(a, b=1):  # noqa: U100
         pass
 
     int_default_int_returns_str.__annotations__ = {
@@ -37,7 +37,7 @@ class _TestResources:
         "return": str,
     }
 
-    def int_default_kwonly_int_returns_str(a, *, b=1):
+    def int_default_kwonly_int_returns_str(a, *, b=1):  # noqa: U100
         pass
 
     int_default_kwonly_int_returns_str.__annotations__ = {
@@ -46,7 +46,7 @@ class _TestResources:
         "return": str,
     }
 
-    def int_kwonly_int_returns_str(a, *, b):
+    def int_kwonly_int_returns_str(a, *, b):  # noqa: U100
         pass
 
     int_kwonly_int_returns_str.__annotations__ = {
@@ -55,7 +55,7 @@ class _TestResources:
         "return": str,
     }
 
-    def newint_int_returns_str(a, b):
+    def newint_int_returns_str(a, b):  # noqa: U100
         pass
 
     newint_int_returns_str.__annotations__ = {
@@ -64,12 +64,12 @@ class _TestResources:
         "return": str,
     }
 
-    def int_int_returns_int(a, b):
+    def int_int_returns_int(a, b):  # noqa: U100
         pass
 
     int_int_returns_int.__annotations__ = {"a": int, "b": int, "return": int}
 
-    def dict_str_int_returns_int(a):
+    def dict_str_int_returns_int(a):  # noqa: U100
         pass
 
     dict_str_int_returns_int.__annotations__ = {
@@ -77,12 +77,12 @@ class _TestResources:
         "return": int,
     }
 
-    def int_returns_int(a):
+    def int_returns_int(a):  # noqa: U100
         pass
 
     int_returns_int.__annotations__ = {"a": int, "return": int}
 
-    def dict_int_str_returns_int(a):
+    def dict_int_str_returns_int(a):  # noqa: U100
         pass
 
     dict_int_str_returns_int.__annotations__ = {
@@ -90,7 +90,7 @@ class _TestResources:
         "return": int,
     }
 
-    def dict_str_str_returns_int(a):
+    def dict_str_str_returns_int(a):  # noqa: U100
         pass
 
     dict_str_str_returns_int.__annotations__ = {
@@ -98,14 +98,14 @@ class _TestResources:
         "return": int,
     }
 
-    def int_default_returns_int(a=123):
+    def int_default_returns_int(a=123):  # noqa: U100
         pass
 
     int_default_returns_int.__annotations__ = {"a": int, "return": int}
 
 
 @pytest.mark.parametrize(
-    "name, callable_, attribute_type",
+    ("name", "callable_", "attribute_type"),
     [
         (
             "no-types-defined-matches-typed-callable",
@@ -231,7 +231,9 @@ class _TestResources:
     ],
 )
 def test_callable_not_raises_with_valid_annotations(
-    name, callable_, attribute_type
+    name,  # noqa: U100
+    callable_,
+    attribute_type,
 ):
     @attr.s
     class Something(object):
@@ -241,7 +243,7 @@ def test_callable_not_raises_with_valid_annotations(
 
 
 @pytest.mark.parametrize(
-    "name, callable_, attribute_type, raised_error_type",
+    ("name", "callable_", "attribute_type", "raised_error_type"),
     [
         (
             "not_a_callable",
@@ -303,7 +305,10 @@ def test_callable_not_raises_with_valid_annotations(
     ],
 )
 def test_callable_raises_with_invalid_types(
-    name, callable_, attribute_type, raised_error_type
+    name,  # noqa: U100
+    callable_,
+    attribute_type,
+    raised_error_type,
 ):
     @attr.s
     class Something(object):

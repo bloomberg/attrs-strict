@@ -1,4 +1,5 @@
 import collections
+import re
 from typing import Any, DefaultDict, Dict, List, Mapping, MutableMapping
 
 import pytest
@@ -29,14 +30,14 @@ def test_defaultdict_raise_error():
     attr.name = "foo"
     attr.type = DefaultDict[int, List[str]]
 
-    with pytest.raises(ValueError) as error:
-        validator(None, attr, elem)
-
-    assert (
-        "<foo must be typing.DefaultDict[int, typing.List[str]] "
+    expected = (
+        "foo must be typing.DefaultDict[int, typing.List[str]] "
         "(got 1 that is a {}) in [1, 2, 3] in "
-        "defaultdict({}, {{5: [1, 2, 3]}})>"
-    ).format(int, int) == repr(error.value)
+        "defaultdict({}, {{5: [1, 2, 3]}})"
+    ).format(int, int)
+
+    with pytest.raises(ValueError, match=re.escape(expected)):
+        validator(None, attr, elem)
 
 
 def test_defaultdict_with_correct_type_no_raise():
@@ -66,15 +67,14 @@ def test_dict_with_any_does_not_raise():
 
 
 @pytest.mark.parametrize(
-    "data, type, validator_type, error_message",
+    ("data", "type", "validator_type", "error_message"),
     [
         (
             {"foo": 123},
             CollectionsMapping,
             Mapping,
             (
-                "<zoo must be typing.Mapping[str, str] "
-                "(got 123 that is a {})"
+                "zoo must be typing.Mapping[str, str] " "(got 123 that is a {})"
             ).format(int),
         ),
         (
@@ -82,7 +82,7 @@ def test_dict_with_any_does_not_raise():
             CollectionsMutableMapping,
             MutableMapping,
             (
-                "<zoo must be typing.MutableMapping[str, str] "
+                "zoo must be typing.MutableMapping[str, str] "
                 "(got 1 that is a {})"
             ).format(int),
         ),
@@ -116,7 +116,5 @@ def test_abc_mapping_types_throw_when_type_is_wrong(
     attr.name = "zoo"
     attr.type = validator_type[str, str]
 
-    with pytest.raises(ValueError) as error:
+    with pytest.raises(ValueError, match=re.escape(error_message)):
         validator(None, attr, TestMapping(data))
-
-    assert error_message in repr(error.value)

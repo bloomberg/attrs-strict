@@ -1,3 +1,4 @@
+import re
 import typing
 
 import attr
@@ -12,7 +13,7 @@ except ImportError:
 
 
 @pytest.mark.parametrize(
-    "items, types, message",
+    ("items", "types", "message"),
     [
         (
             [1, 2, 3],
@@ -46,11 +47,8 @@ def test_container_is_not_of_expected_type_raises_TypeError(
     attr.name = "Smth"
     attr.type = types
 
-    with pytest.raises(ValueError) as error:
+    with pytest.raises(ValueError, match=re.escape(message)):
         validator(None, attr, items)
-
-    repr_msg = "<{}>".format(message)
-    assert repr_msg == repr(error.value)
 
 
 def test_does_not_raise_when_container_is_empty_and_allowed():
@@ -71,13 +69,9 @@ def test_raises_when_container_is_empty_and_empty_ok_is_false():
     attr.name = "Smth"
     attr.type = str
 
-    # WHEN
-    with pytest.raises(ValueError) as error:
-        validator(None, attr, items)
-
-    # THEN
     msg = "Smth can not be empty and must be {} (got [])".format(str)
-    assert msg == str(error.value)
+    with pytest.raises(ValueError, match=re.escape(msg)):
+        validator(None, attr, items)
 
 
 def test_no_type_specified_is_fine():
