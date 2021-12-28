@@ -1,15 +1,13 @@
+from __future__ import annotations
+
 import re
 import sys
 from typing import List, Union
+from unittest.mock import MagicMock
 
 import pytest
 
 from attrs_strict import type_validator
-
-try:
-    from unittest.mock import MagicMock
-except ImportError:
-    from mock import Mock as MagicMock
 
 
 @pytest.mark.parametrize(

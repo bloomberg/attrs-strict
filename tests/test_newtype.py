@@ -1,18 +1,16 @@
+from __future__ import annotations
+
 import typing
+from unittest.mock import MagicMock
 
 import pytest
 
 from attrs_strict import AttributeTypeError, BadTypeError, type_validator
 
-try:
-    from unittest.mock import MagicMock
-except ImportError:
-    from mock import Mock as MagicMock
-
 
 @pytest.mark.parametrize(("test_type", "correct"), [(str, "foo"), (int, 42)])
 def test_typing_newtype_single_validation_success(test_type, correct):
-    SomeNew = typing.NewType("SomeNew", test_type)
+    SomeNew = typing.NewType("SomeNew", test_type)  # noqa: N806
 
     validator = type_validator()
     attr = MagicMock()
@@ -26,7 +24,7 @@ def test_typing_newtype_single_validation_success(test_type, correct):
     ("test_type", "wrongs"), [(str, [42, True]), (int, ["foo", ()])]
 )
 def test_typing_newtype_single_validation_failure(test_type, wrongs):
-    SomeNew = typing.NewType("SomeNew", test_type)
+    SomeNew = typing.NewType("SomeNew", test_type)  # noqa: N806
 
     validator = type_validator()
     attr = MagicMock()
@@ -36,9 +34,7 @@ def test_typing_newtype_single_validation_failure(test_type, wrongs):
         with pytest.raises(AttributeTypeError) as error:
             validator(None, attr, wrong)
 
-    assert "must be NewType(SomeNew, {})".format(str(test_type)) in str(
-        error.value
-    )
+    assert f"must be NewType(SomeNew, {str(test_type)})" in str(error.value)
 
 
 @pytest.mark.parametrize(
@@ -52,7 +48,7 @@ def test_typing_newtype_single_validation_failure(test_type, wrongs):
 def test_typing_newtype_within_container_validation_success(
     container, test_type, correct
 ):
-    SomeNew = typing.NewType("SomeNew", test_type)
+    SomeNew = typing.NewType("SomeNew", test_type)  # noqa: N806
 
     validator = type_validator()
     attr = MagicMock()
@@ -72,7 +68,7 @@ def test_typing_newtype_within_container_validation_success(
 def test_typing_newtype_within_container_validation_failure(
     container, test_type, wrongs
 ):
-    SomeNew = typing.NewType("SomeNew", test_type)
+    SomeNew = typing.NewType("SomeNew", test_type)  # noqa: N806
 
     validator = type_validator()
     attr = MagicMock()
@@ -82,9 +78,9 @@ def test_typing_newtype_within_container_validation_failure(
         with pytest.raises(BadTypeError) as error:
             validator(None, attr, wrong)
 
-    assert "must be {}".format(str(attr.type)) in str(
+    assert f"must be {str(attr.type)}" in str(
         error.value
-    ) or "is not of type {}".format(str(attr.type)) in str(error.value)
+    ) or f"is not of type {str(attr.type)}" in str(error.value)
 
 
 # -----------------------------------------------------------------------------

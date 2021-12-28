@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import re
 
 import attr
@@ -17,7 +19,7 @@ from attrs_strict import type_validator
 )
 def test_primitive_types(value, expected, actual):
     @attr.s
-    class Something(object):
+    class Something:
         number = attr.ib(validator=type_validator(), type=expected)
 
     msg = "number must be {} (got {} that is a {})".format(
@@ -29,11 +31,11 @@ def test_primitive_types(value, expected, actual):
 
 def test_reassign_evaluate():
     @attr.s
-    class Something(object):
+    class Something:
         number = attr.ib(validator=type_validator(), type=str)
 
     x = Something(number="foo")
-    msg = "number must be {} (got 5 that is a {})".format(str, int)
+    msg = f"number must be {str} (got 5 that is a {int})"
     x.number = 5
     with pytest.raises(ValueError, match=re.escape(msg)):
         attr.validate(x)

@@ -1,19 +1,18 @@
+from __future__ import annotations
+
 import re
+import sys
 from enum import Enum
 from typing import Any, List
+from unittest.mock import MagicMock
 
 import pytest
 
 from attrs_strict import type_validator
 
-try:
-    from unittest.mock import MagicMock
-except ImportError:
-    from mock import Mock as MagicMock
-
-try:
+if sys.version_info >= (3, 8):  # pragma: >=3.8 cover
     from typing import Literal
-except ImportError:
+else:  # pragma: <3.8 cover
     from typing_extensions import Literal
 
 
