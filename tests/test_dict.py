@@ -1,23 +1,15 @@
+from __future__ import annotations
+
 import collections
 import re
+from collections.abc import Mapping as CollectionsMapping
+from collections.abc import MutableMapping as CollectionsMutableMapping
 from typing import Any, DefaultDict, Dict, List, Mapping, MutableMapping
+from unittest.mock import MagicMock
 
 import pytest
 
 from attrs_strict import type_validator
-
-try:
-    from collections.abc import Mapping as CollectionsMapping
-    from collections.abc import MutableMapping as CollectionsMutableMapping
-except ImportError:
-    from collections import Mapping as CollectionsMapping
-    from collections import MutableMapping as CollectionsMutableMapping
-
-
-try:
-    from unittest.mock import MagicMock
-except ImportError:
-    from mock import Mock as MagicMock
 
 
 def test_defaultdict_raise_error():
@@ -92,23 +84,23 @@ def test_abc_mapping_types_throw_when_type_is_wrong(
     data, type, validator_type, error_message
 ):
     class TestMapping(type):
-        def __init__(self, items):
+        def __init__(self, items):  # noqa: N804
             self._data = items
 
-        def __getitem__(self, item):
+        def __getitem__(self, item):  # noqa: N804
             return self._data[item]
 
-        def __len__(self):
-            return len(self._data)
+        def __len__(self):  # noqa: N804
+            return len(self._data)  # pragma: no cover
 
-        def __iter__(self):
+        def __iter__(self):  # noqa: N804
             return iter(self._data)
 
-        def __delitem__(self, item):
-            pass
+        def __delitem__(self, item):  # noqa: N804,U100
+            ...
 
-        def __setitem__(self, item, value):
-            pass
+        def __setitem__(self, item, value):  # noqa: N804,U100
+            ...
 
     validator = type_validator()
 

@@ -1,15 +1,13 @@
+from __future__ import annotations
+
 import re
 import typing
+from unittest.mock import MagicMock
 
 import attr
 import pytest
 
 from attrs_strict import type_validator
-
-try:
-    from unittest.mock import MagicMock
-except ImportError:
-    from mock import Mock as MagicMock
 
 
 @pytest.mark.parametrize(
@@ -38,7 +36,7 @@ except ImportError:
         ),
     ],
 )
-def test_container_is_not_of_expected_type_raises_TypeError(
+def test_container_is_not_of_expected_type_raises_type_error(
     items, types, message
 ):
     validator = type_validator()
@@ -69,14 +67,14 @@ def test_raises_when_container_is_empty_and_empty_ok_is_false():
     attr.name = "Smth"
     attr.type = str
 
-    msg = "Smth can not be empty and must be {} (got [])".format(str)
+    msg = f"Smth can not be empty and must be {str} (got [])"
     with pytest.raises(ValueError, match=re.escape(msg)):
         validator(None, attr, items)
 
 
 def test_no_type_specified_is_fine():
     @attr.s
-    class Something(object):
+    class Something:
         numbers = attr.ib(validator=type_validator())
 
     Something([1, 2, 3, 4])

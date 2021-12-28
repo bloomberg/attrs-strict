@@ -15,13 +15,13 @@ from attrs_strict import type_validator
             str,
             "str",
             0xBAD,
-            "value must be {} (got 2989 that is a {})".format(str, int),
+            f"value must be {str} (got 2989 that is a {int})",
         ),
         (
             int,
             7,
             "bad",
-            "value must be {} (got bad that is a {})".format(int, str),
+            f"value must be {int} (got bad that is a {str})",
         ),
         (
             Optional[str],
@@ -61,7 +61,7 @@ class Parent:
 
 def test_forward_ref():
     Child(Parent())
-    msg = "parent must be {} (got 15 that is a {})".format(Parent, int)
+    msg = f"parent must be {Parent} (got 15 that is a {int})"
     with pytest.raises(ValueError, match=re.escape(msg)):
         Child(15)
 
@@ -79,6 +79,6 @@ def test_recursive():
         if sys.version_info == (2, 7) or sys.version_info > (3, 9)
         else "typing.Union[test_auto_attribs__py3.Self, NoneType]"
     )
-    msg = "Value of parent 17 is not of type {}".format(type_repr)
+    msg = f"Value of parent 17 is not of type {type_repr}"
     with pytest.raises(ValueError, match=re.escape(msg)):
         Self(Self(17))

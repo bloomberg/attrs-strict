@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import os
 import sys
 
@@ -30,5 +32,5 @@ html_static_path = []
 
 master_doc = "index"
 
-version = u".".join(__version__.split(".")[:2])
+version = ".".join(__version__.split(".")[:2])
 release = __version__

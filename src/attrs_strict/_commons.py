@@ -1,13 +1,14 @@
-def is_newtype(type_):
-    return (
-        hasattr(type_, "__name__")
-        and hasattr(type_, "__supertype__")
-        and type_.__module__ == "typing"
-    )
+from __future__ import annotations
+
+import typing
 
 
-def format_type(type_):
+def is_newtype(type_: type[typing.Any]) -> bool:
+    return hasattr(type_, "__name__") and hasattr(type_, "__supertype__")
+
+
+def format_type(type_: type[typing.Any]) -> str:
     if is_newtype(type_):
-        return "NewType({}, {})".format(type_.__name__, type_.__supertype__)
+        return f"NewType({type_.__name__}, {type_.__supertype__})"
 
     return str(type_)

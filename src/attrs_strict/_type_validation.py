@@ -1,6 +1,19 @@
+from __future__ import annotations
+
 import collections
+import inspect
+import sys
 import typing
+from collections.abc import Callable, Mapping, MutableMapping
 from enum import Enum
+from inspect import Parameter, Signature, signature
+from itertools import zip_longest
+from typing import ForwardRef
+
+if sys.version_info >= (3, 8):  # pragma: >=3.8 cover
+    from typing import Literal
+else:  # pragma: <3.8 cover
+    from typing_extensions import Literal
 
 import attr
 
@@ -15,33 +28,6 @@ from ._error import (
     UnionError,
     UnsupportedLiteralError,
 )
-
-try:
-    from collections.abc import Callable, Mapping, MutableMapping
-except ImportError:
-    from collections import Callable, Mapping, MutableMapping
-
-try:
-    from inspect import Parameter, Signature, signature
-except ImportError:
-    # silencing type error so mypy doesn't complain about duplicate import
-    from funcsigs import Parameter, Signature, signature  # type: ignore
-
-try:
-    from itertools import zip_longest
-except ImportError:
-    # silencing type error so mypy doesn't complain about duplicate import
-    from itertools import izip_longest as zip_longest  # type: ignore
-
-try:
-    from typing import ForwardRef
-except ImportError:
-    from typing import _ForwardRef as ForwardRef  # type: ignore # Not in stubs
-
-try:
-    from typing import Literal
-except ImportError:
-    from typing_extensions import Literal  # type: ignore
 
 SupportedLiterals = (int, str, bool, Enum)
 
@@ -67,7 +53,11 @@ class SimilarTypes:
     Callable = {typing.Callable, Callable}
 
 
-def resolve_types(cls, global_ns=None, local_ns=None):
+def resolve_types(
+    cls: type,
+    global_ns: dict[str, typing.Any] | None = None,
+    local_ns: dict[str, typing.Any] | None = None,
+) -> None:
     """
     Resolve any strings and forward annotations in type annotations.
 
@@ -77,7 +67,7 @@ def resolve_types(cls, global_ns=None, local_ns=None):
     :raise TypeError: If *cls* is not a class.
     :raise attr.exceptions.NotAnAttrsClassError: If *cls* is not an ``attrs``
            class.
-    :raise NameError: If types cannot be resolved because of missing variables.
+    :raise NameError: If types cannot be resolved because of missing variables.1
 
     """
     hints = typing.get_type_hints(cls, globalns=global_ns, localns=local_ns)
@@ -87,7 +77,11 @@ def resolve_types(cls, global_ns=None, local_ns=None):
             object.__setattr__(field, "type", hints[field.name])
 
 
-def type_validator(empty_ok=True):
+def type_validator(
+    empty_ok: bool = True,
+) -> typing.Callable[
+    [typing.Any, attr.Attribute[typing.Any], typing.Any], None
+]:
     """
     Validates the attributes using the type argument specified. If the
     type argument is not present, the attribute is considered valid.
@@ -97,7 +91,11 @@ def type_validator(empty_ok=True):
 
     """
 
-    def _validator(instance, attribute, field):
+    def _validator(
+        instance: typing.Any,
+        attribute: attr.Attribute[typing.Any],
+        field: typing.Any,
+    ) -> None:
         if not empty_ok and not field:
             raise EmptyError(field, attribute)
 
@@ -110,7 +108,11 @@ def type_validator(empty_ok=True):
     return _validator
 
 
-def _validate_elements(attribute, value, expected_type):
+def _validate_elements(
+    attribute: attr.Attribute[typing.Any],
+    value: typing.Any,
+    expected_type: type[typing.Any] | None,
+) -> None:
     if expected_type is None:
         return
 
@@ -139,9 +141,9 @@ def _validate_elements(attribute, value, expected_type):
         _handle_callable(attribute, value, expected_type)
 
 
-def _get_base_type(type_):
+def _get_base_type(type_: type[typing.Any]) -> type[typing.Any]:
     if hasattr(type_, "__origin__") and type_.__origin__ is not None:
-        base_type = type_.__origin__  # type: typing.Type[typing.Any]
+        base_type: type[typing.Any] = type_.__origin__
     elif is_newtype(type_):
         base_type = type_.__supertype__
     elif getattr(type_, "__args__", None) or getattr(type_, "__values__", None):
@@ -152,7 +154,9 @@ def _get_base_type(type_):
     return base_type
 
 
-def _type_matching(actual, expected):
+def _type_matching(
+    actual: type[typing.Any], expected: type[typing.Any]
+) -> bool:
     actual = actual.__supertype__ if is_newtype(actual) else actual
     expected = expected.__supertype__ if is_newtype(expected) else expected
     actual = type(None) if actual is None else actual
@@ -185,15 +189,23 @@ def _type_matching(actual, expected):
 
 
 def _handle_callable_arg(
-    attribute, _signature, expected_type, actual, expected
-):
+    attribute: attr.Attribute[typing.Any],
+    _signature: inspect.Signature,
+    expected_type: type[typing.Callable[..., typing.Any]],
+    actual: type[typing.Any],
+    expected: type[typing.Any],
+) -> None:
     if not _type_matching(actual, expected):
         raise CallableError(
             attribute, _signature, expected_type, actual, expected
         )
 
 
-def _handle_callable(attribute, callable_, expected_type):
+def _handle_callable(
+    attribute: attr.Attribute[typing.Any],
+    callable_: typing.Callable[..., typing.Any],
+    expected_type: type[typing.Callable[..., typing.Any]],
+) -> None:
     _signature = signature(callable_)
     empty = Signature.empty
     callable_args = list(_signature.parameters.values())
@@ -245,7 +257,11 @@ def _handle_callable(attribute, callable_, expected_type):
     )
 
 
-def _handle_set_or_list(attribute, container, expected_type):
+def _handle_set_or_list(
+    attribute: attr.Attribute[typing.Any],
+    container: set[typing.Any] | list[typing.Any],
+    expected_type: type[set[typing.Any]] | type[list[typing.Any]],
+) -> None:
     (element_type,) = expected_type.__args__  # type: ignore
 
     for element in container:
@@ -256,7 +272,13 @@ def _handle_set_or_list(attribute, container, expected_type):
             raise error
 
 
-def _handle_dict(attribute, container, expected_type):
+def _handle_dict(
+    attribute: attr.Attribute[typing.Any],
+    container: typing.Mapping[typing.Any, typing.Any]
+    | typing.MutableMapping[typing.Any, typing.Any],
+    expected_type: type[typing.Mapping[typing.Any, typing.Any]]
+    | type[typing.MutableMapping[typing.Any, typing.Any]],
+) -> None:
     key_type, value_type = expected_type.__args__  # type: ignore
 
     for key in container:
@@ -268,7 +290,11 @@ def _handle_dict(attribute, container, expected_type):
             raise error
 
 
-def _handle_tuple(attribute, container, expected_type):
+def _handle_tuple(
+    attribute: attr.Attribute[typing.Any],
+    container: tuple[typing.Any],
+    expected_type: type[tuple[typing.Any]],
+) -> None:
     tuple_types = expected_type.__args__  # type: ignore
     if len(tuple_types) == 2 and tuple_types[1] == Ellipsis:
         element_type = tuple_types[0]
@@ -285,7 +311,11 @@ def _handle_tuple(attribute, container, expected_type):
             raise error
 
 
-def _handle_union(attribute, value, expected_type):
+def _handle_union(
+    attribute: attr.Attribute[typing.Any],
+    value: typing.Any,
+    expected_type: type[typing.Any],
+) -> None:
     union_has_none_type = any(
         elem is None.__class__ for elem in expected_type.__args__
     )
@@ -302,7 +332,11 @@ def _handle_union(attribute, value, expected_type):
     raise UnionError(value, attribute.name, expected_type)
 
 
-def _handle_literal(attribute, value, expected_type):
+def _handle_literal(
+    attribute: attr.Attribute[typing.Any],
+    value: typing.Any,
+    expected_type: type[typing.Any],
+) -> None:
     flattened_literals = _flatten_literals(expected_type)
 
     if not any(
@@ -312,14 +346,14 @@ def _handle_literal(attribute, value, expected_type):
         raise LiteralError(attribute.name, value, flattened_literals)
 
 
-def _flatten_literals(literals):  # type: ignore
+def _flatten_literals(literals: type[Literal]) -> list[typing.Any]:  # type: ignore
     meta = "__args__" if hasattr(literals, "__args__") else "__values__"
     extracted_literals = getattr(literals, meta, None)
 
     flattened_literals = []
     unsupported_literals = []
 
-    for literal in extracted_literals:
+    for literal in extracted_literals or []:
         base_type = _get_base_type(literal)
         if base_type == Literal or base_type == type(Literal):  # type: ignore
             flattened_literals.extend(_flatten_literals(literal))

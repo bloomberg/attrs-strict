@@ -1,6 +1,7 @@
 """Runtime validation library for attrs data classes.
 
 """
+from __future__ import annotations
 
 from ._error import (
     AttributeTypeError,
@@ -12,7 +13,7 @@ from ._error import (
     UnionError,
 )
 from ._type_validation import type_validator
-from ._version import __version__  # noqa
+from ._version import __version__
 
 __all__ = [
     "type_validator",
@@ -23,6 +24,7 @@ __all__ = [
     "TupleError",
     "TypeValidationError",
     "UnionError",
+    "__version__",
 ]
 
 # -----------------------------------------------------------------------------

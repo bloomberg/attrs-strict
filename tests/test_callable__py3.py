@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import typing
 
 import attr
@@ -10,26 +12,26 @@ class _TestResources:
 
     NewInt = typing.NewType("NewType", int)
 
-    def plain_unannotated_callable(a, b):  # noqa: U100
-        pass
+    def plain_unannotated_callable(a, b):  # noqa: U100,N805
+        ...
 
-    def int_int_returns_str(a, b):  # noqa: U100
-        pass
+    def int_int_returns_str(a, b):  # noqa: U100,N805
+        ...
 
     int_int_returns_str.__annotations__ = {"a": int, "b": int, "return": str}
 
     def no_args_returns_str():
-        pass
+        ...
 
     no_args_returns_str.__annotations__ = {"return": str}
 
-    def int_int_returns_none(a, b):  # noqa: U100
-        pass
+    def int_int_returns_none(a, b):  # noqa: U100,N805
+        ...
 
     int_int_returns_none.__annotations__ = {"a": int, "b": int, "return": None}
 
-    def int_default_int_returns_str(a, b=1):  # noqa: U100
-        pass
+    def int_default_int_returns_str(a, b=1):  # noqa: U100,N805
+        ...
 
     int_default_int_returns_str.__annotations__ = {
         "a": int,
@@ -37,8 +39,8 @@ class _TestResources:
         "return": str,
     }
 
-    def int_default_kwonly_int_returns_str(a, *, b=1):  # noqa: U100
-        pass
+    def int_default_kwonly_int_returns_str(a, *, b=1):  # noqa: U100,N805
+        ...
 
     int_default_kwonly_int_returns_str.__annotations__ = {
         "a": int,
@@ -46,8 +48,8 @@ class _TestResources:
         "return": str,
     }
 
-    def int_kwonly_int_returns_str(a, *, b):  # noqa: U100
-        pass
+    def int_kwonly_int_returns_str(a, *, b):  # noqa: U100,N805
+        ...
 
     int_kwonly_int_returns_str.__annotations__ = {
         "a": int,
@@ -55,8 +57,8 @@ class _TestResources:
         "return": str,
     }
 
-    def newint_int_returns_str(a, b):  # noqa: U100
-        pass
+    def newint_int_returns_str(a, b):  # noqa: U100,N805
+        ...
 
     newint_int_returns_str.__annotations__ = {
         "a": NewInt,
@@ -64,42 +66,42 @@ class _TestResources:
         "return": str,
     }
 
-    def int_int_returns_int(a, b):  # noqa: U100
-        pass
+    def int_int_returns_int(a, b):  # noqa: U100,N805
+        ...
 
     int_int_returns_int.__annotations__ = {"a": int, "b": int, "return": int}
 
-    def dict_str_int_returns_int(a):  # noqa: U100
-        pass
+    def dict_str_int_returns_int(a):  # noqa: U100,N805
+        ...
 
     dict_str_int_returns_int.__annotations__ = {
         "a": typing.Dict[str, int],
         "return": int,
     }
 
-    def int_returns_int(a):  # noqa: U100
-        pass
+    def int_returns_int(a):  # noqa: U100,N805
+        ...
 
     int_returns_int.__annotations__ = {"a": int, "return": int}
 
-    def dict_int_str_returns_int(a):  # noqa: U100
-        pass
+    def dict_int_str_returns_int(a):  # noqa: U100,N805
+        ...
 
     dict_int_str_returns_int.__annotations__ = {
         "a": typing.Dict[int, str],
         "return": int,
     }
 
-    def dict_str_str_returns_int(a):  # noqa: U100
-        pass
+    def dict_str_str_returns_int(a):  # noqa: U100,N805
+        ...
 
     dict_str_str_returns_int.__annotations__ = {
         "a": typing.Dict[str, str],
         "return": int,
     }
 
-    def int_default_returns_int(a=123):  # noqa: U100
-        pass
+    def int_default_returns_int(a=123):  # noqa: U100,N805
+        ...
 
     int_default_returns_int.__annotations__ = {"a": int, "return": int}
 
@@ -236,7 +238,7 @@ def test_callable_not_raises_with_valid_annotations(
     attribute_type,
 ):
     @attr.s
-    class Something(object):
+    class Something:
         call_me = attr.ib(validator=type_validator(), type=attribute_type)
 
     Something(call_me=callable_)
@@ -311,7 +313,7 @@ def test_callable_raises_with_invalid_types(
     raised_error_type,
 ):
     @attr.s
-    class Something(object):
+    class Something:
         call_me = attr.ib(validator=type_validator(), type=attribute_type)
 
     with pytest.raises(raised_error_type):
