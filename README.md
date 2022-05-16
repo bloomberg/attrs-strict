@@ -155,7 +155,7 @@ We welcome issue reports [here](../../issues); be sure to choose the proper issu
 can be sure you're providing the necessary information.
 
 Before sending a [Pull Request](../../pulls), please make sure you read our
-[Contribution Guidelines](https://github.com/bloomberg/.github/blob/master/CONTRIBUTING.md).
+[Contribution Guidelines](https://github.com/bloomberg/.github/blob/main/CONTRIBUTING.md).
 
 ## License
 
@@ -163,7 +163,7 @@ Please read the [LICENSE](LICENSE) file.
 
 ## Code of Conduct
 
-This project has adopted a [Code of Conduct](https://github.com/bloomberg/.github/blob/master/CODE_OF_CONDUCT.md). If
+This project has adopted a [Code of Conduct](https://github.com/bloomberg/.github/blob/main/CODE_OF_CONDUCT.md). If
 you have any concerns about the Code, or behavior which you have experienced in the project, please contact us at
 opensource@bloomberg.net.
 
