@@ -244,7 +244,7 @@ def _handle_callable(
                 attribute,
                 _signature,
                 expected_type,
-                callable_kind,
+                callable_kind,  # type: ignore
                 expected_arg,
             )
 
