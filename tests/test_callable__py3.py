@@ -9,7 +9,6 @@ from attrs_strict import AttributeTypeError, CallableError, type_validator
 
 
 class _TestResources:
-
     NewInt = typing.NewType("NewType", int)
 
     def plain_unannotated_callable(a, b):  # noqa: U100,N805

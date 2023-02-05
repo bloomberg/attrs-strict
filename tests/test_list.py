@@ -57,7 +57,6 @@ from attrs_strict import type_validator
     ],
 )
 def test_list_of_values_raise_value_error(values, type_, error_message):
-
     validator = type_validator()
 
     attrib = MagicMock()
