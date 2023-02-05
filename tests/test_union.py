@@ -32,7 +32,6 @@ from attrs_strict import type_validator
     ],
 )
 def test_union_when_type_is_not_specified_raises(element, type_, error_message):
-
     validator = type_validator()
 
     attr = MagicMock()
