@@ -1,16 +1,9 @@
 [build-system]
-requires = [
-    "setuptools>=67.6",
-    "setuptools-scm>=7.1",
-]
 build-backend = 'setuptools.build_meta'
-
-[tool.black]
-line-length = 80
-
-[tool.isort]
-profile = "black"
-known_first_party = ["attrst_strict", "tests"]
+requires = [
+  "setuptools>=67.6",
+  "setuptools-scm>=7.1",
+]
 
 [tool.setuptools_scm]
 write_to = "src/attrs_strict/_version.py"
@@ -35,3 +28,10 @@ __version__ :str = "{version}"
 # limitations under the License.
 # ----------------------------- END-OF-FILE -----------------------------------
 """
+
+[tool.black]
+line-length = 80
+
+[tool.isort]
+profile = "black"
+known_first_party = ["attrst_strict", "tests"]
