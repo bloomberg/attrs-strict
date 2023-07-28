@@ -4,12 +4,12 @@ import collections
 import inspect
 import sys
 import typing
+import types
 from collections.abc import Callable, Mapping, MutableMapping
 from enum import Enum
 from inspect import Parameter, Signature, signature
 from itertools import zip_longest
 from typing import ForwardRef
-
 if sys.version_info >= (3, 8):  # pragma: >=3.8 cover
     from typing import Literal
 else:  # pragma: <3.8 cover
@@ -127,7 +127,7 @@ def _validate_elements(
         raise _StringAnnotationError()
     elif base_type == Literal or base_type == type(Literal):  # type: ignore
         _handle_literal(attribute, value, expected_type)
-    elif base_type == typing.Union:  # type: ignore
+    elif base_type == typing.Union or base_type == types.UnionType:  # type: ignore
         _handle_union(attribute, value, expected_type)
     elif not isinstance(value, base_type):
         raise AttributeTypeError(value, attribute)
@@ -166,7 +166,7 @@ def _type_matching(
 
     base_type = _get_base_type(expected)
 
-    if base_type == typing.Union:  # type: ignore
+    if base_type == typing.Union or base_type == types.UnionType:  # type: ignore
         return any(
             _type_matching(actual, expected_candidate)
             for expected_candidate in expected.__args__
