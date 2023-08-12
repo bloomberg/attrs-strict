@@ -29,6 +29,15 @@ from attrs_strict import type_validator
                 )
             ),
         ),
+        (
+            10,
+            str | None if sys.version_info >= (3, 10) else Union[str, None],
+            "Value of foo 10 is not of type {}".format(
+                "str | None"
+                if sys.version_info >= (3, 10)
+                else "typing.Optional[str]"
+            ),
+        ),
     ],
 )
 def test_union_when_type_is_not_specified_raises(element, type_, error_message):
@@ -48,6 +57,9 @@ def test_union_when_type_is_not_specified_raises(element, type_, error_message):
         (2.0, Union[int, float]),
         ([1, 2, None, 4, 5], List[Union[None, int]]),
         (None, Union[int, None]),
+        (10, int | None)
+        if sys.version_info >= (3, 10)
+        else (10, Union[int, None]),
     ],
 )
 def test_union_not_raise_for_correct_values(element, type_):
