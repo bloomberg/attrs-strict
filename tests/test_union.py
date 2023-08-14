@@ -36,6 +36,8 @@ from attrs_strict import type_validator
                 "str | None"
                 if sys.version_info >= (3, 10)
                 else "typing.Optional[str]"
+                if sys.version_info >= (3, 9)
+                else "typing.Union[str, NoneType]"
             ),
         ),
     ],
