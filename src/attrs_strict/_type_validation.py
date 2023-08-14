@@ -10,7 +10,7 @@ from inspect import Parameter, Signature, signature
 from itertools import zip_longest
 from typing import ForwardRef
 
-if sys.version_info >= (3, 10):
+if sys.version_info >= (3, 10):  # pragma: >=3.10 cover
     from types import UnionType
 
 if sys.version_info >= (3, 8):  # pragma: >=3.8 cover
