@@ -51,9 +51,9 @@ def test_defaultdict_with_correct_type_no_raise():
     [
         ({}, dict),
         ({}, Dict),
-        ({'a': 1}, dict),
-        ({'a': 1}, Dict),
-    ]
+        ({"a": 1}, dict),
+        ({"a": 1}, Dict),
+    ],
 )
 def test_dict_without_args_any_does_not_raise(data, type):
     validator = type_validator()
