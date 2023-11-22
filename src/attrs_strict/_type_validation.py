@@ -285,6 +285,9 @@ def _handle_dict(
     expected_type: type[typing.Mapping[typing.Any, typing.Any]]
     | type[typing.MutableMapping[typing.Any, typing.Any]],
 ) -> None:
+    if not hasattr(expected_type, '__args__'):
+        return  # No annotations specified on type, matches all dicts
+
     key_type, value_type = expected_type.__args__  # type: ignore
 
     for key in container:

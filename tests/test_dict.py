@@ -46,6 +46,25 @@ def test_defaultdict_with_correct_type_no_raise():
     validator(None, attr, elem)
 
 
+@pytest.mark.parametrize(
+    ("data", "type"),
+    [
+        ({}, dict),
+        ({}, Dict),
+        ({'a': 1}, dict),
+        ({'a': 1}, Dict),
+    ]
+)
+def test_dict_without_args_any_does_not_raise(data, type):
+    validator = type_validator()
+
+    attr = MagicMock()
+    attr.name = "zoo"
+    attr.type = type
+
+    validator(None, attr, data)
+
+
 def test_dict_with_any_does_not_raise():
     elem = {"foo": 123, "b": "abc"}
 
