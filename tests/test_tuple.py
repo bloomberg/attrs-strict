@@ -68,6 +68,23 @@ def test_variable_length_tuple_empty():
     validator(None, attr, element)
 
 
+@pytest.mark.parametrize(
+    ("data", "type"),
+    [
+        ((1, 2, 3), tuple),
+        ((1, 2, 3), Tuple),
+    ],
+)
+def test_tuple_without_args(data, type):
+    attr = MagicMock()
+    attr.name = "foo"
+    attr.type = type
+
+    validator = type_validator()
+
+    validator(None, attr, data)
+
+
 def test_variable_length_tuple_raises():
     element = (1, 2, 3, "4")
 
