@@ -265,6 +265,9 @@ def _handle_set_or_list(
     container: set[typing.Any] | list[typing.Any],
     expected_type: type[set[typing.Any]] | type[list[typing.Any]],
 ) -> None:
+    if not hasattr(expected_type, '__args__'):
+        return  # No annotations specified on type, matches all sets or lists
+
     (element_type,) = expected_type.__args__  # type: ignore
 
     for element in container:
