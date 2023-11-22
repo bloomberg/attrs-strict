@@ -265,7 +265,7 @@ def _handle_set_or_list(
     container: set[typing.Any] | list[typing.Any],
     expected_type: type[set[typing.Any]] | type[list[typing.Any]],
 ) -> None:
-    if not hasattr(expected_type, '__args__'):
+    if not hasattr(expected_type, "__args__"):
         return  # No annotations specified on type, matches all sets or lists
 
     (element_type,) = expected_type.__args__  # type: ignore
@@ -285,7 +285,7 @@ def _handle_dict(
     expected_type: type[typing.Mapping[typing.Any, typing.Any]]
     | type[typing.MutableMapping[typing.Any, typing.Any]],
 ) -> None:
-    if not hasattr(expected_type, '__args__'):
+    if not hasattr(expected_type, "__args__"):
         return  # No annotations specified on type, matches all dicts
 
     key_type, value_type = expected_type.__args__  # type: ignore
