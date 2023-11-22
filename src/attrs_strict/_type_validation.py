@@ -268,7 +268,7 @@ def _handle_set_or_list(
     if not hasattr(expected_type, "__args__"):
         return  # No annotations specified on type, matches all sets or lists
 
-    (element_type,) = expected_type.__args__  # type: ignore
+    (element_type,) = expected_type.__args__
 
     for element in container:
         try:
@@ -288,7 +288,7 @@ def _handle_dict(
     if not hasattr(expected_type, "__args__"):
         return  # No annotations specified on type, matches all dicts
 
-    key_type, value_type = expected_type.__args__  # type: ignore
+    key_type, value_type = expected_type.__args__
 
     for key in container:
         try:
