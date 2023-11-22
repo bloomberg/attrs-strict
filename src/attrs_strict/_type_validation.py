@@ -304,6 +304,9 @@ def _handle_tuple(
     container: tuple[typing.Any],
     expected_type: type[tuple[typing.Any]],
 ) -> None:
+    if not hasattr(expected_type, "__args__"):
+        return  # No annotations specified on type, matches all tuples
+
     tuple_types = expected_type.__args__  # type: ignore
     if len(tuple_types) == 2 and tuple_types[1] == Ellipsis:
         element_type = tuple_types[0]
