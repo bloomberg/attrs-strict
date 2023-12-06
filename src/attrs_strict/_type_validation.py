@@ -343,7 +343,7 @@ def _handle_literal(
     flattened_literals = _flatten_literals(expected_type)
 
     if not any(
-        value == literal and type(value) == type(literal)
+        value == literal and type(value) == type(literal)  # noqa: E721
         for literal in flattened_literals
     ):
         raise LiteralError(attribute.name, value, flattened_literals)
