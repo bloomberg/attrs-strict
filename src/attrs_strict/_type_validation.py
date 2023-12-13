@@ -310,7 +310,7 @@ def _handle_tuple(
 ) -> None:
     tuple_types = get_args(expected_type)
 
-    if not tuple_types :
+    if not tuple_types:
         return  # No annotations specified on type, matches all tuples
 
     if len(tuple_types) == 2 and tuple_types[1] == Ellipsis:

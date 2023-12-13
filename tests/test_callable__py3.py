@@ -230,9 +230,9 @@ class _TestResources:
             typing.Callable[[int], int],
         ),
         (
-                "callable_with_no_args",
-                _TestResources.plain_unannotated_callable,
-                typing.Callable,
+            "callable_with_no_args",
+            _TestResources.plain_unannotated_callable,
+            typing.Callable,
         ),
     ],
 )
