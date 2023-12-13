@@ -229,6 +229,11 @@ class _TestResources:
             _TestResources.int_default_returns_int,
             typing.Callable[[int], int],
         ),
+        (
+                "callable_with_no_args",
+                _TestResources.plain_unannotated_callable,
+                typing.Callable,
+        ),
     ],
 )
 def test_callable_not_raises_with_valid_annotations(
