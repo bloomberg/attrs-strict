@@ -14,9 +14,9 @@ if sys.version_info >= (3, 10):  # pragma: >=3.10 cover
     from types import UnionType
 
 if sys.version_info >= (3, 8):  # pragma: >=3.8 cover
-    from typing import Literal
+    from typing import Literal, get_args
 else:  # pragma: <3.8 cover
-    from typing_extensions import Literal
+    from typing_extensions import Literal, get_args
 
 import attr
 
@@ -265,10 +265,12 @@ def _handle_set_or_list(
     container: set[typing.Any] | list[typing.Any],
     expected_type: type[set[typing.Any]] | type[list[typing.Any]],
 ) -> None:
-    if not hasattr(expected_type, "__args__"):
+    args = get_args(expected_type)
+
+    if not args:
         return  # No annotations specified on type, matches all sets or lists
 
-    (element_type,) = expected_type.__args__
+    (element_type,) = args
 
     for element in container:
         try:
@@ -285,10 +287,12 @@ def _handle_dict(
     expected_type: type[typing.Mapping[typing.Any, typing.Any]]
     | type[typing.MutableMapping[typing.Any, typing.Any]],
 ) -> None:
-    if not hasattr(expected_type, "__args__"):
+    args = get_args(expected_type)
+
+    if not args:
         return  # No annotations specified on type, matches all dicts
 
-    key_type, value_type = expected_type.__args__
+    key_type, value_type = args
 
     for key in container:
         try:
@@ -304,10 +308,11 @@ def _handle_tuple(
     container: tuple[typing.Any],
     expected_type: type[tuple[typing.Any]],
 ) -> None:
-    if not hasattr(expected_type, "__args__"):
+    tuple_types = get_args(expected_type)
+
+    if not tuple_types :
         return  # No annotations specified on type, matches all tuples
 
-    tuple_types = expected_type.__args__  # type: ignore
     if len(tuple_types) == 2 and tuple_types[1] == Ellipsis:
         element_type = tuple_types[0]
         tuple_types = (element_type,) * len(container)
